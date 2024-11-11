@@ -1,4 +1,13 @@
-<!-- NG-ZORRO -->
-<a href="https://github.com/NG-ZORRO/ng-zorro-antd" target="_blank" style="display: flex;align-items: center;justify-content: center;height: 100%;width: 100%;">
-  <img height="300" src="https://img.alicdn.com/tfs/TB1X.qJJgHqK1RjSZFgXXa7JXXa-89-131.svg">
-</a>
+<nz-header class="main-header" nz-row nzType="flex" style="background-color: rgb(0, 0, 0);">
+  <div>
+    <h2 style="color: aliceblue; padding-left: 10px;">Event Ticketing System</h2>
+  </div>
+
+  <div class="nav-links">
+    <a nz-button nzType="link" routerLink="/home" routerLinkActive="active">Home</a>
+    <a nz-button nzType="link" routerLink="/register" routerLinkActive="active">Register</a>
+    <a nz-button nzType="link" routerLink="/login" routerLinkActive="active">Login</a>
+  </div>
+</nz-header>
+
+<router-outlet></router-outlet>

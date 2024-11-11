@@ -1,0 +1,42 @@
+.main-header {
+    background-color: rgb(0, 0, 0);
+    color: aliceblue;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;  // Space out the two sections (left and right)
+    align-items: center;  // Align items vertically in the center
+  
+    .ant-row {
+      display: flex;
+      justify-content: space-between;  // Space out the content in the row
+      align-items: center;
+      width: 100%;  // Make sure the row takes full width
+    }
+  
+    h2 {
+      margin: 0;
+      padding-left: 10px;
+    }
+  
+    .nav-links {
+      display: flex;
+      gap: 20px;  // Space between the links
+      align-items: center;  // Align nav links vertically
+  
+      a {
+        color: aliceblue;
+        font-weight: 600;
+        font-size: 16px;
+        transition: color 0.3s ease;
+  
+        &.active {
+          color: #1890ff;  // Active link color (default blue)
+        }
+  
+        &:hover {
+          color: #1890ff;  // Change color on hover
+        }
+      }
+    }
+  }
+  
