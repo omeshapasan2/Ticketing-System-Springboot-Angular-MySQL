@@ -26,4 +26,15 @@ public class AuthenticationController {
 
         return new ResponseEntity<>(createdUser, HttpStatus.OK);
     }
+
+    @PostMapping("/vendor/signup")
+    public ResponseEntity<?> signupVendor(@RequestBody SignupRequestDTO signupRequestDTO){
+        if(authService.precentByEmail(signupRequestDTO.getEmail())){
+            return new ResponseEntity<>("Vendor Already Exists" , HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDto createdUser = authService.signupClient(signupRequestDTO);
+
+        return new ResponseEntity<>(createdUser, HttpStatus.OK);
+    }
 }
