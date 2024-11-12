@@ -1,5 +1,6 @@
 package com.oopCw.EventTicketingSystem.entity;
 
+import com.oopCw.EventTicketingSystem.dto.UserDto;
 import com.oopCw.EventTicketingSystem.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,5 +25,15 @@ public class User {
     private String phone;
 
     private UserRole role;
+
+    public UserDto getDto(){
+        UserDto userDto = new UserDto();
+        userDto.setId(id);
+        userDto.setName(name);
+        userDto.setEmail(email);
+        userDto.setRole(role);
+
+        return userDto;
+    }
 
 }

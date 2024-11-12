@@ -1,6 +1,7 @@
 package com.oopCw.EventTicketingSystem.services.authentication;
 
 import com.oopCw.EventTicketingSystem.dto.SignupRequestDTO;
+import com.oopCw.EventTicketingSystem.dto.UserDto;
 import com.oopCw.EventTicketingSystem.entity.User;
 import com.oopCw.EventTicketingSystem.enums.UserRole;
 import com.oopCw.EventTicketingSystem.repository.UserRepository;
@@ -23,6 +24,27 @@ public class AuthServiceImpl implements AuthService{
         user.setPassword(signupRequestDTO.getPassword());
 
         user.setRole(UserRole.CUSTOMER);
+
+        return userRepository.save(user).getDto();
+
+    }
+
+    public Boolean precentByEmail(String email){
+        return userRepository.findFirstByEmail(email) != null;
+    }
+
+    public UserDto signupVendor(SignupRequestDTO signupRequestDTO){
+        User user = new User();
+
+        user.setName(signupRequestDTO.getName());
+        user.setLastname(signupRequestDTO.getLastname());
+        user.setEmail(signupRequestDTO.getEmail());
+        user.setPhone(signupRequestDTO.getPhone());
+        user.setPassword(signupRequestDTO.getPassword());
+
+        user.setRole(UserRole.CUSTOMER);
+
+        return userRepository.save(user).getDto();
 
     }
 }

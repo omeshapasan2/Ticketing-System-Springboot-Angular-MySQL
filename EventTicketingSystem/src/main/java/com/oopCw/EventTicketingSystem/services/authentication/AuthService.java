@@ -1,4 +1,10 @@
 package com.oopCw.EventTicketingSystem.services.authentication;
 
-public class AuthService {
+import com.oopCw.EventTicketingSystem.dto.SignupRequestDTO;
+import com.oopCw.EventTicketingSystem.dto.UserDto;
+
+public interface AuthService {
+    UserDto signupClient(SignupRequestDTO signupRequestDTO);
+
+    Boolean precentByEmail(String email);
 }
