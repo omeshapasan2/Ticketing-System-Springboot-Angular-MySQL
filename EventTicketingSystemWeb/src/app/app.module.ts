@@ -17,7 +17,8 @@ import { DemoNgZorroAntdModule } from './DemoNgZorroAntdModule';
 
 // Import necessary NG-ZORRO modules
 import { NzLayoutModule } from 'ng-zorro-antd/layout';  // For nz-header
-import { NzButtonModule } from 'ng-zorro-antd/button';  // For nz-button
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { SignupClientComponent } from './basic/components/signup-client/signup-client.component';  // For nz-button
 
 registerLocaleData(en);
 
@@ -25,7 +26,8 @@ registerLocaleData(en);
   declarations: [
     AppComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    SignupClientComponent
   ],
   imports: [
     BrowserModule,
