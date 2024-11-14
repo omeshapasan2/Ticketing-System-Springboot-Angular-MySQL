@@ -14,11 +14,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoNgZorroAntdModule } from './DemoNgZorroAntdModule';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';  
+import { NzButtonModule } from 'ng-zorro-antd/button';  
+import { SignupClientComponent } from './basic/components/signup-client/signup-client.component';
+import { SignupVendorComponent } from './basic/components/signup-vendor/signup-vendor.component';
 
-// Import necessary NG-ZORRO modules
-import { NzLayoutModule } from 'ng-zorro-antd/layout';  // For nz-header
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { SignupClientComponent } from './basic/components/signup-client/signup-client.component';  // For nz-button
 
 registerLocaleData(en);
 
@@ -27,18 +27,19 @@ registerLocaleData(en);
     AppComponent,
     LoginComponent,
     SignupComponent,
-    SignupClientComponent
+    SignupClientComponent,
+    SignupVendorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     DemoNgZorroAntdModule,
-    NzLayoutModule,  // Add NzLayoutModule for nz-header
-    NzButtonModule,  // Add NzButtonModule for nz-button
-    ReactiveFormsModule
+    NzLayoutModule,  
+    NzButtonModule,  
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     provideClientHydration(),
