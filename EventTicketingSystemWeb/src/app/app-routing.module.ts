@@ -9,7 +9,9 @@ const routes: Routes = [
   { path: 'register_vendor', component: SignupVendorComponent},
   { path: 'login', component: LoginComponent},
   { path: 'client', loadChildren: () => import('./client/client.module').then(m => m.ClientModule) },
-  { path: 'vendor', loadChildren: () => import('./vendor/vendor.module').then(m => m.VendorModule) }
+  { path: 'vendor', loadChildren: () => import('./vendor/vendor.module').then(m => m.VendorModule) },
+
+  { path: 'register', redirectTo: 'register_customer', pathMatch: 'full' }
 ];
 
 @NgModule({
