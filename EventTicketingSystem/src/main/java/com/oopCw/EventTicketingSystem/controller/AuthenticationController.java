@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
     @Autowired
     private AuthService authService;
@@ -40,13 +40,14 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
-    public static final String TOKENPREFIX = "Bearer ";
+    @Autowired
+    public static final String TOKEN_PREFIX = "Bearer ";
 
     public static final String HEADER_STRING = "Authorization";
 
     @PostMapping("/customer/signup")
     public ResponseEntity<?> signupClient(@RequestBody SignupRequestDTO signupRequestDTO){
-        if(authService.precentByEmail(signupRequestDTO.getEmail())){
+        if(authService.presentByEmail(signupRequestDTO.getEmail())){
             return new ResponseEntity<>("Client Already Exists" , HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -57,7 +58,7 @@ public class AuthenticationController {
 
     @PostMapping("/vendor/signup")
     public ResponseEntity<?> signupVendor(@RequestBody SignupRequestDTO signupRequestDTO){
-        if(authService.precentByEmail(signupRequestDTO.getEmail())){
+        if(authService.presentByEmail(signupRequestDTO.getEmail())){
             return new ResponseEntity<>("Vendor Already Exists" , HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -91,6 +92,6 @@ public class AuthenticationController {
         response.addHeader("Access-Control-Allow-Headers","Authorization" +
                 " X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
 
-        response.addHeader(HEADER_STRING, TOKENPREFIX+jwt);
+        response.addHeader(HEADER_STRING, TOKEN_PREFIX+jwt);
     }
 }

@@ -6,5 +6,5 @@ import com.oopCw.EventTicketingSystem.dto.UserDto;
 public interface AuthService {
     UserDto signupClient(SignupRequestDTO signupRequestDTO);
     UserDto signupVendor(SignupRequestDTO signupRequestDTO);
-    Boolean precentByEmail(String email);
+    Boolean presentByEmail(String email);
 }

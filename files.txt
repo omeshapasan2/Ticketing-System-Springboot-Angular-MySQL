@@ -1,0 +1,775 @@
+Backend(Springboot) Files
+
+SimpleCorsFilter.java
+
+package com.oopCw.EventTicketingSystem.configs;
+
+//get file from https://github.com/slantz/spring-boot-2-oauth2-resource-service/blob/master/src/main/java/com/yourproject/resource/config/SimpleCorsFilter.java
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class SimpleCorsFilter implements Filter {
+
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        Map<String, String> map = new HashMap<>();
+        String originHeader = request.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Origin", originHeader != null ? originHeader : "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, x-requested-with");
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            chain.doFilter(req, res);
+        }
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) {
+    }
+
+    @Override
+    public void destroy() {
+    }
+}
+
+AuthenticationController.java
+
+package com.oopCw.EventTicketingSystem.controller;
+
+import com.oopCw.EventTicketingSystem.dto.AuthenticationRequest;
+import com.oopCw.EventTicketingSystem.dto.SignupRequestDTO;
+import com.oopCw.EventTicketingSystem.dto.UserDto;
+import com.oopCw.EventTicketingSystem.entity.User;
+import com.oopCw.EventTicketingSystem.repository.UserRepository;
+import com.oopCw.EventTicketingSystem.services.authentication.AuthService;
+import com.oopCw.EventTicketingSystem.services.jwt.UserDetailsServiceImpl;
+import com.oopCw.EventTicketingSystem.util.JwtUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@RestController
+@CrossOrigin(origins = "*")
+public class AuthenticationController {
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public static final String TOKENPREFIX = "Bearer ";
+
+    public static final String HEADER_STRING = "Authorization";
+
+    @PostMapping("/customer/signup")
+    public ResponseEntity<?> signupClient(@RequestBody SignupRequestDTO signupRequestDTO){
+        if(authService.presentByEmail(signupRequestDTO.getEmail())){
+            return new ResponseEntity<>("Client Already Exists" , HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDto createdUser = authService.signupClient(signupRequestDTO);
+
+        return new ResponseEntity<>(createdUser, HttpStatus.OK);
+    }
+
+    @PostMapping("/vendor/signup")
+    public ResponseEntity<?> signupVendor(@RequestBody SignupRequestDTO signupRequestDTO){
+        if(authService.presentByEmail(signupRequestDTO.getEmail())){
+            return new ResponseEntity<>("Vendor Already Exists" , HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDto createdUser = authService.signupVendor(signupRequestDTO);
+
+        return new ResponseEntity<>(createdUser, HttpStatus.OK);
+    }
+
+    @PostMapping({"/authenticate"})
+    public void createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws IOException, JSONException {
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.getUsername(),authenticationRequest.getPassword()
+            ));
+        } catch (BadCredentialsException e){
+            throw  new BadCredentialsException("Incorrect Username or Password", e);
+        }
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        User user = userRepository.findFirstByEmail(authenticationRequest.getUsername());
+
+        response.getWriter().write(new JSONObject()
+                .put("userId", user.getId())
+                .put("role", user.getRole())
+                .toString()
+        );
+
+        response.addHeader("Access-Control-Expose-Headers","Authorization");
+        response.addHeader("Access-Control-Allow-Headers","Authorization" +
+                " X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
+
+        response.addHeader(HEADER_STRING, TOKENPREFIX+jwt);
+    }
+}
+
+AuthenticationRequest.java
+
+package com.oopCw.EventTicketingSystem.dto;
+
+
+import lombok.Data;
+
+@Data
+public class AuthenticationRequest {
+
+    private String username;
+
+    private String password;
+}
+
+
+AuthService.java
+
+package com.oopCw.EventTicketingSystem.services.authentication;
+
+import com.oopCw.EventTicketingSystem.dto.SignupRequestDTO;
+import com.oopCw.EventTicketingSystem.dto.UserDto;
+
+public interface AuthService {
+    UserDto signupClient(SignupRequestDTO signupRequestDTO);
+    UserDto signupVendor(SignupRequestDTO signupRequestDTO);
+    Boolean presentByEmail(String email);
+}
+
+
+AuthServiceImpl.java
+
+package com.oopCw.EventTicketingSystem.services.authentication;
+
+import com.oopCw.EventTicketingSystem.dto.SignupRequestDTO;
+import com.oopCw.EventTicketingSystem.dto.UserDto;
+import com.oopCw.EventTicketingSystem.entity.User;
+import com.oopCw.EventTicketingSystem.enums.UserRole;
+import com.oopCw.EventTicketingSystem.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthServiceImpl implements AuthService{
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public UserDto signupClient(SignupRequestDTO signupRequestDTO){
+        User user = new User();
+
+        user.setName(signupRequestDTO.getName());
+        user.setLastname(signupRequestDTO.getLastname());
+        user.setEmail(signupRequestDTO.getEmail());
+        user.setPhone(signupRequestDTO.getPhone());
+        user.setPassword(new BCryptPasswordEncoder().encode(signupRequestDTO.getPassword()));
+
+        user.setRole(UserRole.CUSTOMER);
+
+        return userRepository.save(user).getDto();
+
+    }
+
+    public Boolean presentByEmail(String email){
+        return userRepository.findFirstByEmail(email) != null;
+    }
+
+    public UserDto signupVendor(SignupRequestDTO signupRequestDTO){
+        User user = new User();
+
+        user.setName(signupRequestDTO.getName());
+        user.setLastname(signupRequestDTO.getLastname());
+        user.setEmail(signupRequestDTO.getEmail());
+        user.setPhone(signupRequestDTO.getPhone());
+        user.setPassword(new BCryptPasswordEncoder().encode(signupRequestDTO.getPassword()));
+
+        user.setRole(UserRole.VENDOR);
+
+        return userRepository.save(user).getDto();
+
+    }
+}
+
+application.properties
+
+spring.application.name=EventTicketingSystem
+
+spring.datasource.url=jdbc:mysql://localhost:3306/ticket_system?createDatabaseIfNotExist=true
+
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+
+spring.datasource.username=root
+spring.datasource.password=mysql
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+
+
+pom.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.0.6</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.cham</groupId>
+	<artifactId>backend</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>backend</name>
+	<description>Demo project for Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.external.google</groupId>
+			<artifactId>android-json</artifactId>
+			<version>0.0.20131108.vaadin1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- Maven Compiler Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>17</source>
+					<target>17</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+
+
+Frontend(Angular) Files
+
+signup.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss'
+})
+export class SignupComponent {
+
+}
+
+
+signup-client.component.ts
+
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+
+@Component({
+  selector: 'app-signup-client',
+  templateUrl: './signup-client.component.html',
+  styleUrls: ['./signup-client.component.scss']
+})
+export class SignupClientComponent {
+
+validateForm!: FormGroup;
+
+constructor(private fb: FormBuilder
+  ,private authService: AuthService
+  ,private notification:NzNotificationService
+  ,private router:Router){}
+
+  ngOnInit(){
+    this.validateForm = this.fb.group({
+      email: [null,[Validators.email, Validators.required]],
+      name: [null,[Validators.required]],
+      lastname: [null,[Validators.required]],
+      phone: [null,[Validators.required]],
+      password: [null,[Validators.required]],
+      checkPassword: [null,[Validators.required]],
+    })
+    
+  }
+
+  submitForm(){
+    this.authService.registerCustomer(this.validateForm.value).subscribe(res =>{
+      this.notification
+        .success(
+          'SUCCESS',
+          'Signup Successful',
+          { nzDuration: 5000 }
+        );
+        this.router.navigateByUrl('/login');
+    },error =>{
+      this.notification
+      .error(
+        'ERROR',
+        `${error.error}`,
+        {nzDuration: 5000}
+      )
+    });
+  } 
+
+}
+
+
+signup-vendor.component.ts
+
+import { Component } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { AuthService } from '../../services/auth/auth.service';
+
+@Component({
+  selector: 'app-signup-vendor',
+  templateUrl: './signup-vendor.component.html',
+  styleUrl: './signup-vendor.component.scss'
+})
+export class SignupVendorComponent {
+  validateForm!: FormGroup;
+
+  constructor(private fb: FormBuilder
+    ,private authService: AuthService
+    ,private notification:NzNotificationService
+    ,private router:Router){}
+  
+    ngOnInit(){
+      this.validateForm = this.fb.group({
+        email: [null,[Validators.email, Validators.required]],
+        name: [null,[Validators.required]],
+        lastname: [null,[Validators.required]],
+        phone: [null,[Validators.required]],
+        password: [null,[Validators.required]],
+        checkPassword: [null,[Validators.required]],
+      })
+      
+    }
+  
+    submitForm(){
+      this.authService.registerCustomer(this.validateForm.value).subscribe(res =>{
+        this.notification
+          .success(
+            'SUCCESS',
+            'Signup Successful',
+            { nzDuration: 5000 }
+          );
+          this.router.navigateByUrl('/login');
+      },error =>{
+        this.notification
+        .error(
+          'ERROR',
+          `${error.error}`,
+          {nzDuration: 5000}
+        )
+  
+      });
+    }
+  
+}
+
+auth.service.ts
+
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+
+const BASIC_URL = 'http://localhost:8080/'
+export const AUTH_HEADER = 'authorization';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor(private http: HttpClient,) { }
+
+  registerCustomer(signupRequestDTO:any):Observable<any>{
+    return this.http.post(BASIC_URL + "customer/signup" , signupRequestDTO);
+  }
+
+  registerVendor(signupRequestDTO:any):Observable<any>{
+    return this.http.post(BASIC_URL + "vendor/signup" , signupRequestDTO);
+  }
+
+  login(username:string, password:string){
+    return this.http.post(BASIC_URL + "authenticate" , { username, password},{observe: 'response'})
+      .pipe(
+        map((res: HttpResponse<any>) =>{
+          console.log(res.body)
+          const tokenLength = res.headers.get(AUTH_HEADER)?.length;
+          const bearerToken = res.headers.get(AUTH_HEADER)?.substring(7, tokenLength);
+          console.log(bearerToken);
+          return res;
+        })
+      );
+  }
+}
+
+app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './basic/components/login/login.component';
+import { SignupComponent } from './basic/components/signup/signup.component';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { en_US } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DemoNgZorroAntdModule } from './DemoNgZorroAntdModule';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';  
+import { NzButtonModule } from 'ng-zorro-antd/button';  
+import { SignupClientComponent } from './basic/components/signup-client/signup-client.component';
+import { SignupVendorComponent } from './basic/components/signup-vendor/signup-vendor.component';
+
+
+registerLocaleData(en);
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    SignupComponent,
+    SignupClientComponent,
+    SignupVendorComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    DemoNgZorroAntdModule,
+    NzLayoutModule,  
+    NzButtonModule,  
+    ReactiveFormsModule,
+    HttpClientModule
+  ],
+  providers: [
+    provideClientHydration(),
+    { provide: NZ_I18N, useValue: en_US },
+    provideAnimationsAsync(),
+    provideHttpClient()
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+app.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { SignupClientComponent } from './basic/components/signup-client/signup-client.component';
+import { SignupVendorComponent } from './basic/components/signup-vendor/signup-vendor.component';
+import { LoginComponent } from './basic/components/login/login.component';
+
+const routes: Routes = [
+  { path: 'register_customer', component: SignupClientComponent},
+  { path: 'register_vendor', component: SignupVendorComponent},
+  { path: 'login', component: LoginComponent},
+  { path: 'client', loadChildren: () => import('./client/client.module').then(m => m.ClientModule) },
+  { path: 'vendor', loadChildren: () => import('./vendor/vendor.module').then(m => m.VendorModule) },
+
+  { path: 'register', redirectTo: 'register_customer', pathMatch: 'full' }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+DemoNgZorroAntdModule.ts
+
+import { NgModule } from '@angular/core';
+
+import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { NzCascaderModule } from 'ng-zorro-antd/cascader';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzCommentModule } from 'ng-zorro-antd/comment';
+import { NzNoAnimationModule } from 'ng-zorro-antd/core/no-animation';
+import { NzTransButtonModule } from 'ng-zorro-antd/core/trans-button';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzI18nModule } from 'ng-zorro-antd/i18n';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzImageModule } from 'ng-zorro-antd/image';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzMentionModule } from 'ng-zorro-antd/mention';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTransferModule } from 'ng-zorro-antd/transfer';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzResizableModule } from 'ng-zorro-antd/resizable';
+import { NzPipesModule } from 'ng-zorro-antd/pipes';
+
+@NgModule({
+  exports: [
+    NzAffixModule,
+    NzAlertModule,
+    NzAnchorModule,
+    NzAutocompleteModule,
+    NzAvatarModule,
+    NzBackTopModule,
+    NzBadgeModule,
+    NzButtonModule,
+    NzBreadCrumbModule,
+    NzCalendarModule,
+    NzCardModule,
+    NzCarouselModule,
+    NzCascaderModule,
+    NzCheckboxModule,
+    NzCollapseModule,
+    NzCommentModule,
+    NzDatePickerModule,
+    NzDescriptionsModule,
+    NzDividerModule,
+    NzDrawerModule,
+    NzDropDownModule,
+    NzEmptyModule,
+    NzFormModule,
+    NzGridModule,
+    NzI18nModule,
+    NzIconModule,
+    NzImageModule,
+    NzInputModule,
+    NzInputNumberModule,
+    NzLayoutModule,
+    NzListModule,
+    NzMentionModule,
+    NzMenuModule,
+    NzMessageModule,
+    NzModalModule,
+    NzNoAnimationModule,
+    NzNotificationModule,
+    NzPageHeaderModule,
+    NzPaginationModule,
+    NzPopconfirmModule,
+    NzPopoverModule,
+    NzProgressModule,
+    NzRadioModule,
+    NzRateModule,
+    NzResultModule,
+    NzSelectModule,
+    NzSkeletonModule,
+    NzSliderModule,
+    NzSpinModule,
+    NzStatisticModule,
+    NzStepsModule,
+    NzSwitchModule,
+    NzTableModule,
+    NzTabsModule,
+    NzTagModule,
+    NzTimePickerModule,
+    NzTimelineModule,
+    NzToolTipModule,
+    NzTransButtonModule,
+    NzTransferModule,
+    NzTreeModule,
+    NzTreeViewModule,
+    NzTreeSelectModule,
+    NzTypographyModule,
+    NzUploadModule,
+    NzWaveModule,
+    NzResizableModule,
+    NzPipesModule,
+  ]
+})
+
+export class DemoNgZorroAntdModule {}
+

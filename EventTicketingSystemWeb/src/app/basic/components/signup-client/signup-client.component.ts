@@ -13,17 +13,19 @@ export class SignupClientComponent {
 
 validateForm!: FormGroup;
 
-constructor(private fb: FormBuilder
+constructor(
+  private fb: FormBuilder
   ,private authService: AuthService
   ,private notification:NzNotificationService
-  ,private router:Router){}
+  ,private router:Router
+){}
 
   ngOnInit(){
     this.validateForm = this.fb.group({
       email: [null,[Validators.email, Validators.required]],
       name: [null,[Validators.required]],
       lastname: [null,[Validators.required]],
-      phone: [null,[Validators.required]],
+      phone: [null],
       password: [null,[Validators.required]],
       checkPassword: [null,[Validators.required]],
     })
@@ -46,8 +48,7 @@ constructor(private fb: FormBuilder
         `${error.error}`,
         {nzDuration: 5000}
       )
-
     });
-  }
+  } 
 
 }

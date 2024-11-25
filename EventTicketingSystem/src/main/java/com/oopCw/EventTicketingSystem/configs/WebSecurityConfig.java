@@ -24,13 +24,22 @@ public class WebSecurityConfig {
     private JwtRequestFilter requestFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
+                .cors().and()  // Enable CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/authenticate","/company/sign-up","/ads","/search/{service}").permitAll()
+                // Permit endpoints without authentication
+                .requestMatchers(
+                        "/customer/signup",
+                        "/vendor/signup",
+                        "/authenticate",
+                        "/company/sign-up",
+                        "/ads",
+                        "/search/{service}"
+                ).permitAll()
+                // Secure all other endpoints
+                .anyRequest().authenticated()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/**")
-                .authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -38,13 +47,14 @@ public class WebSecurityConfig {
                 .build();
     }
 
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
