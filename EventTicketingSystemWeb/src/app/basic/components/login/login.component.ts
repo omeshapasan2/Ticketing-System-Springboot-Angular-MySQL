@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth/auth.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 import { error } from 'console';
+import { UserStorageService } from '../../services/storage/user-storage.service';
+
 
 @Component({
   selector: 'app-login',
@@ -24,7 +26,7 @@ export class LoginComponent {
 
   ngOnInit(){
     this.validateForm = this.fb.group({
-      userName : [null, [Validators.required]],
+      username : [null, [Validators.required]],
       password : [null, [Validators.required]],      
     })
   }
@@ -32,11 +34,16 @@ export class LoginComponent {
 
   submitForm() {
     this.authService.login(
-      this.validateForm.get('userName')!.value,
+      this.validateForm.get('username')!.value,
       this.validateForm.get('password')!.value
     ).subscribe(
       (res) => {
         console.log(res);
+        if(UserStorageService.isClientLoggedIn()){
+          this.router.navigateByUrl('client/dashboard')
+        }else if(UserStorageService.isVendorLoggedIn()){
+          this.router.navigateByUrl('vendor/dashboard')
+        }
       },
       (error) => {
         this.notification.error(

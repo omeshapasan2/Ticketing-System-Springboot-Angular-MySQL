@@ -19,12 +19,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse; // Correct import for Spring Boot 3.x
 import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
+
     @Autowired
     private AuthService authService;
 
@@ -40,58 +41,59 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     public static final String TOKEN_PREFIX = "Bearer ";
-
     public static final String HEADER_STRING = "Authorization";
 
     @PostMapping("/customer/signup")
-    public ResponseEntity<?> signupClient(@RequestBody SignupRequestDTO signupRequestDTO){
-        if(authService.presentByEmail(signupRequestDTO.getEmail())){
-            return new ResponseEntity<>("Client Already Exists" , HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity<?> signupClient(@RequestBody SignupRequestDTO signupRequestDTO) {
+        if (authService.presentByEmail(signupRequestDTO.getEmail())) {
+            return new ResponseEntity<>("Client Already Exists", HttpStatus.NOT_ACCEPTABLE);
         }
 
         UserDto createdUser = authService.signupClient(signupRequestDTO);
-
         return new ResponseEntity<>(createdUser, HttpStatus.OK);
     }
 
     @PostMapping("/vendor/signup")
-    public ResponseEntity<?> signupVendor(@RequestBody SignupRequestDTO signupRequestDTO){
-        if(authService.presentByEmail(signupRequestDTO.getEmail())){
-            return new ResponseEntity<>("Vendor Already Exists" , HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity<?> signupVendor(@RequestBody SignupRequestDTO signupRequestDTO) {
+        if (authService.presentByEmail(signupRequestDTO.getEmail())) {
+            return new ResponseEntity<>("Vendor Already Exists", HttpStatus.NOT_ACCEPTABLE);
         }
 
         UserDto createdUser = authService.signupVendor(signupRequestDTO);
-
         return new ResponseEntity<>(createdUser, HttpStatus.OK);
     }
 
     @PostMapping({"/authenticate"})
     public void createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws IOException, JSONException {
-        try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    authenticationRequest.getUsername(),authenticationRequest.getPassword()
-            ));
-        } catch (BadCredentialsException e){
-            throw  new BadCredentialsException("Incorrect Username or Password", e);
+        try {
+            // Authenticate the user
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Incorrect Username or Password", e);
         }
 
+        // Load user details
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
+        // Generate JWT using the username
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
+        // Fetch user entity for additional details
         User user = userRepository.findFirstByEmail(authenticationRequest.getUsername());
 
+        // Write response
         response.getWriter().write(new JSONObject()
                 .put("userId", user.getId())
                 .put("role", user.getRole())
                 .toString()
         );
 
-        response.addHeader("Access-Control-Expose-Headers","Authorization");
-        response.addHeader("Access-Control-Allow-Headers","Authorization" +
-                " X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
-
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX+jwt);
+        // Add headers for JWT and CORS
+        response.addHeader("Access-Control-Expose-Headers", "Authorization");
+        response.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
+        response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
     }
 }

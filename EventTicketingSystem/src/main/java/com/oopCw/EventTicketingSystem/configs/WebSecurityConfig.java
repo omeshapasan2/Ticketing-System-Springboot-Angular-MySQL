@@ -21,32 +21,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     @Autowired
-    private JwtRequestFilter requestFilter;
+    private JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
-                .cors().and()  // Enable CORS
+                .cors().and()
                 .authorizeHttpRequests()
-                // Permit endpoints without authentication
-                .requestMatchers(
-                        "/customer/signup",
-                        "/vendor/signup",
-                        "/authenticate",
-                        "/company/sign-up",
-                        "/ads",
-                        "/search/{service}"
-                ).permitAll()
-                // Secure all other endpoints
+                .requestMatchers("/authenticate", "/customer/signup", "/vendor/signup").permitAll() // Use requestMatchers instead of antMatchers
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
