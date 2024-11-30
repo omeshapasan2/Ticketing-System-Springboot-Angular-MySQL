@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class JwtTokenProvider {
 
-    private static String secretKey = "C6O3QyK95otTbR9vR7bYh1d5pNkF5R6YHvEpkC2wgbI="; // Replace with a strong secret key
+    private static String secretKey = "pC6O3QyK95otTbR9vR7bYh1d5pNkF5R6YHvEkC2wgbI=";
 
     public static String generateToken(String username, String role) {
         return Jwts.builder()
