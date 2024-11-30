@@ -1,5 +1,7 @@
 package com.oop.Springboot.controller;
 
+import com.oop.Springboot.dto.AuthResponse;
+import com.oop.Springboot.security.JwtTokenProvider;
 import com.oop.Springboot.entity.User;
 import com.oop.Springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -33,8 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody User loginUser) {
-        // Perform authentication using the provided credentials
+    public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword())
         );
@@ -44,8 +47,16 @@ public class AuthController {
 
         // Get the authenticated user
         String currentUsername = authentication.getName();
-        return userService.findByUsername(currentUsername)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        Optional<User> user = userService.findByUsername(currentUsername);
+
+        if (user.isPresent()) {
+            // Here you can create a response with the token and role
+            String role = user.get().getRole();
+            String token = JwtTokenProvider.generateToken(currentUsername, role); // Assuming you have a method to generate token
+
+            return ResponseEntity.ok(new AuthResponse(token, role)); // AuthResponse is a DTO containing token and role
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 }
