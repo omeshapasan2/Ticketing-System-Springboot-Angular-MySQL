@@ -52,9 +52,9 @@ public class AuthController {
         if (user.isPresent()) {
             // Here you can create a response with the token and role
             String role = user.get().getRole();
-            String token = JwtTokenProvider.generateToken(currentUsername, role); // Assuming you have a method to generate token
+            String token = JwtTokenProvider.generateToken(currentUsername, role);
 
-            return ResponseEntity.ok(new AuthResponse(token, role)); // AuthResponse is a DTO containing token and role
+            return ResponseEntity.ok(new AuthResponse(token, role));
         }
 
         return ResponseEntity.badRequest().build();

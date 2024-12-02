@@ -34,11 +34,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Changed to requestMatchers
+                        .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin().disable()
-                .cors(); // Enable CORS support
+                .cors();
 
         return http.build();
     }
@@ -64,7 +64,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowCredentials(true);
-        corsConfig.addAllowedOrigin("http://localhost:4200"); // Angular frontend URL
+        corsConfig.addAllowedOrigin("http://localhost:4200");
         corsConfig.addAllowedHeader("*");
         corsConfig.addAllowedMethod("*");
         corsConfig.addExposedHeader("Authorization");
