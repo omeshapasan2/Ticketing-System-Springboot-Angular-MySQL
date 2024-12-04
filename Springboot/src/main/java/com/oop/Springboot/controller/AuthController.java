@@ -42,15 +42,15 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword())
         );
 
-        // If authentication is successful, set the authentication in the security context
+        // if authentication is successful, set the authentication in the security context
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Get the authenticated user
+        // get the authenticated user
         String currentUsername = authentication.getName();
         Optional<User> user = userService.findByUsername(currentUsername);
 
         if (user.isPresent()) {
-            // Here you can create a response with the token and role
+            // create a response with the token and role
             String role = user.get().getRole();
             String token = JwtTokenProvider.generateToken(currentUsername, role);
 
