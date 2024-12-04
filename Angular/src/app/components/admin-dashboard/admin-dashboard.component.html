@@ -1,9 +1,30 @@
-<div class="dashboard-header">
-    <h1></h1>
-</div>
-  
+<div class="dashboard-header"></div>
+
 <div class="dashboard">
-    <h2>Welcome, Admin!</h2>
-    <p>Select an option from the menu to get started.</p>
+  <div class="form-container">
+    <h2>Enter Values</h2>
+    <form (ngSubmit)="submitForm()">
+      <label for="totalTickets">Total Tickets:</label>
+      <input type="number" id="totalTickets" [(ngModel)]="totalTickets" name="totalTickets" required>
+
+      <label for="ticketReleaseRate">Ticket Release Rate:</label>
+      <input type="number" id="ticketReleaseRate" [(ngModel)]="ticketReleaseRate" name="ticketReleaseRate" required>
+
+      <label for="customerRetrievalRate">Customer Retrieval Rate:</label>
+      <input type="number" id="customerRetrievalRate" [(ngModel)]="customerRetrievalRate" name="customerRetrievalRate" required>
+
+      <label for="maxTicketCapacity">Maximum Ticket Capacity:</label>
+      <input type="number" id="maxTicketCapacity" [(ngModel)]="maxTicketCapacity" name="maxTicketCapacity" required>
+
+      <button type="submit">Start</button>
+      <button type="button" (click)="stop()">Stop</button>
+    </form>
+  </div>
+
+  <div class="logs-container">
+    <h2>Logs</h2>
+    <div class="logs">
+      <div *ngFor="let log of logs">{{ log }}</div>
+    </div>
+  </div>
 </div>
-  

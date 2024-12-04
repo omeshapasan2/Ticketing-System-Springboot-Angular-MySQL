@@ -6,33 +6,65 @@ body {
     min-height: 100vh;
     margin: 0;
     background-color: #4d4c4c;
-  }
-  
-  h1 {
+}
+
+h1 {
     color: #000000;
-  }
-  
-  .dashboard-header {
+}
+
+.dashboard-header {
     background-color: #fdfdfd;
     color: rgb(0, 0, 0);
-    // padding: 1px;
     text-align: center;
     border-bottom: 3px solid #ddd;
-  }
-  
-  .dashboard {
-    text-align: center;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: space-between;
     margin: 50px auto;
-    max-width: 800px;
-  }
-  
-  .dashboard h2 {
-    font-size: 1.5rem;
-    color: #ffffff;
-    margin-bottom: 1rem;
-  }
-  
-  .dashboard p {
-    color: #ffffff;
-  }
-  
+    max-width: 1200px;
+}
+
+.form-container {
+    background-color: #666;
+    padding: 20px;
+    width: 45%;
+    border-radius: 8px;
+}
+
+.logs-container {
+    background-color: #333;
+    color: #fff;
+    width: 45%;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input {
+    padding: 8px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.logs {
+    height: 300px;
+    overflow-y: auto;
+    background-color: #222;
+    padding: 10px;
+    border-radius: 8px;
+}
