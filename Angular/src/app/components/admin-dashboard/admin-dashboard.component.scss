@@ -1,0 +1,38 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #4d4c4c;
+  }
+  
+  h1 {
+    color: #000000;
+  }
+  
+  .dashboard-header {
+    background-color: #fdfdfd;
+    color: rgb(0, 0, 0);
+    // padding: 1px;
+    text-align: center;
+    border-bottom: 3px solid #ddd;
+  }
+  
+  .dashboard {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 800px;
+  }
+  
+  .dashboard h2 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+  }
+  
+  .dashboard p {
+    color: #ffffff;
+  }
+  

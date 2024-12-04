@@ -1,0 +1,91 @@
+/* Ensure the background color is black */
+body {
+  background: black;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container styles */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Card container */
+.card {
+  background-color: rgba(51, 51, 51, 1);
+  padding: 40px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styles */
+.card-header {
+  color: #ffffff;
+  background-color: #333;
+  font-size: 24px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Card body */
+.card-body {
+  color: #e7e7e7;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box; /* Ensure padding is part of the element width */
+}
+
+.form-control:focus {
+  border-color: #40a9ff;
+  outline: none;
+}
+
+/* Button styles */
+button {
+  width: 100%;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  height: 40px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px; /* Space between form fields and button */
+  box-sizing: border-box; /* Ensure padding is part of the element width */
+}
+
+button:hover {
+  background-color: #3da1ed;
+}
+
+button:active {
+  background-color: rgb(30, 90, 160);
+  transform: translateY(0);
+}
+
+/* Role selection styles */
+.role-selection {
+  margin-bottom: 16px;
+}
+
+.role-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between role options */
+  cursor: pointer;
+}

@@ -1,0 +1,40 @@
+body{
+    align-items: center;
+}
+
+h1{
+    color: aqua;
+}
+
+.dashboard {
+    text-align: center;
+    margin: 50px;
+  
+    h1 {
+      font-size: 2rem;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+  
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+  
+      .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+  
