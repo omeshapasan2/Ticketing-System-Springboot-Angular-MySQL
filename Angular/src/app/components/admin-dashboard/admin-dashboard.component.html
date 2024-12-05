@@ -3,20 +3,64 @@
 <div class="dashboard">
   <div class="form-container">
     <h2>Enter Values</h2>
-    <form (ngSubmit)="submitForm()">
+    <form (ngSubmit)="submitForm()" #form="ngForm">
       <label for="totalTickets">Total Tickets:</label>
-      <input type="number" id="totalTickets" [(ngModel)]="totalTickets" name="totalTickets" required>
+      <input
+        type="number"
+        id="totalTickets"
+        [(ngModel)]="totalTickets"
+        name="totalTickets"
+        required
+        min="1"
+        #totalTicketsModel="ngModel"
+      />
+      <div *ngIf="totalTicketsModel.invalid && totalTicketsModel.touched" class="error-message">
+        Total Tickets is required and must be greater than 0.
+      </div>
 
       <label for="ticketReleaseRate">Ticket Release Rate:</label>
-      <input type="number" id="ticketReleaseRate" [(ngModel)]="ticketReleaseRate" name="ticketReleaseRate" required>
+      <input
+        type="number"
+        id="ticketReleaseRate"
+        [(ngModel)]="ticketReleaseRate"
+        name="ticketReleaseRate"
+        required
+        min="1"
+        #ticketReleaseRateModel="ngModel"
+      />
+      <div *ngIf="ticketReleaseRateModel.invalid && ticketReleaseRateModel.touched" class="error-message">
+        Ticket Release Rate is required and must be greater than 0.
+      </div>
 
       <label for="customerRetrievalRate">Customer Retrieval Rate:</label>
-      <input type="number" id="customerRetrievalRate" [(ngModel)]="customerRetrievalRate" name="customerRetrievalRate" required>
+      <input
+        type="number"
+        id="customerRetrievalRate"
+        [(ngModel)]="customerRetrievalRate"
+        name="customerRetrievalRate"
+        required
+        min="1"
+        #customerRetrievalRateModel="ngModel"
+      />
+      <div *ngIf="customerRetrievalRateModel.invalid && customerRetrievalRateModel.touched" class="error-message">
+        Customer Retrieval Rate is required and must be greater than 0.
+      </div>
 
       <label for="maxTicketCapacity">Maximum Ticket Capacity:</label>
-      <input type="number" id="maxTicketCapacity" [(ngModel)]="maxTicketCapacity" name="maxTicketCapacity" required>
+      <input
+        type="number"
+        id="maxTicketCapacity"
+        [(ngModel)]="maxTicketCapacity"
+        name="maxTicketCapacity"
+        required
+        min="1"
+        #maxTicketCapacityModel="ngModel"
+      />
+      <div *ngIf="maxTicketCapacityModel.invalid && maxTicketCapacityModel.touched" class="error-message">
+        Maximum Ticket Capacity is required and must be greater than 0.
+      </div>
 
-      <button type="submit">Start</button>
+      <button type="submit" [disabled]="form.invalid">Start</button>
       <button type="button" (click)="stop()">Stop</button>
     </form>
   </div>
@@ -24,7 +68,7 @@
   <div class="logs-container">
     <h2>Real-Time Logs</h2>
     <div class="logs">
-      <div *ngFor="let log of logs">{{ log }}</div>  <!-- for looping through logs and displaying them -->
+      <div *ngFor="let log of logs">{{ log }}</div>
     </div>
     <button type="button" (click)="clearLogs()">Clear Logs (Frontend)</button>
     <button type="button" (click)="clearLogsOnServer()">Clear Logs (Server)</button>
