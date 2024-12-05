@@ -68,18 +68,71 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        int totalTickets = -1;
+        int ticketReleaseRate = -1;
+        int customerRetrievalRate = -1;
+        int maxTicketCapacity = -1;
+
         // get user input for configuration
-        System.out.print("Enter total number of tickets: ");
-        int totalTickets = scanner.nextInt();
+        //----------------------------------
 
-        System.out.print("Enter ticket release rate (vendors): ");
-        int ticketReleaseRate = scanner.nextInt();
+        // Validate total number of tickets input
+        while (totalTickets <= 0) {
+            System.out.print("Enter total number of tickets: ");
+            if (scanner.hasNextInt()) {
+                totalTickets = scanner.nextInt();
+                if (totalTickets <= 0) {
+                    System.out.println("Please enter a positive integer for total tickets.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // clear invalid input
+            }
+        }
 
-        System.out.print("Enter customer retrieval rate (customers): ");
-        int customerRetrievalRate = scanner.nextInt();
+        // Validate ticket release rate input
+        while (ticketReleaseRate <= 0) {
+            System.out.print("Enter ticket release rate (vendors): ");
+            if (scanner.hasNextInt()) {
+                ticketReleaseRate = scanner.nextInt();
+                if (ticketReleaseRate <= 0) {
+                    System.out.println("Please enter a positive integer for ticket release rate.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // clear invalid input
+            }
+        }
 
-        System.out.print("Enter maximum ticket capacity: ");
-        int maxTicketCapacity = scanner.nextInt();
+        // Validate customer retrieval rate input
+        while (customerRetrievalRate <= 0) {
+            System.out.print("Enter customer retrieval rate (customers): ");
+            if (scanner.hasNextInt()) {
+                customerRetrievalRate = scanner.nextInt();
+                if (customerRetrievalRate <= 0) {
+                    System.out.println("Please enter a positive integer for customer retrieval rate.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // clear invalid input
+            }
+        }
+
+        // Validate maximum ticket capacity input
+        while (maxTicketCapacity <= 0) {
+            System.out.print("Enter maximum ticket capacity: ");
+            if (scanner.hasNextInt()) {
+                maxTicketCapacity = scanner.nextInt();
+                if (maxTicketCapacity <= 0) {
+                    System.out.println("Please enter a positive integer for maximum ticket capacity.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // clear invalid input
+            }
+        }
+
+        //----------------------------------
 
         // create configuration object and set values
         Configuration config = new Configuration();
