@@ -20,13 +20,14 @@ export class LogService {
     this.logSocket.subscribe({
       next: (message: any) => {
         try {
-          // Check if the message is already an object
+          // Check if the message is already an object and stringify it if necessary
           if (typeof message === 'object') {
             console.log('New log received:', message);
+            this.handleLog(message);  // Process the log object
           } else if (typeof message === 'string') {
-            // If message is a string, parse it as JSON
-            const parsedMessage = JSON.parse(message);
-            console.log('New log received:', parsedMessage);
+            // If message is a string, directly log it
+            console.log('New log received:', message);
+            this.pushLog(message);  // Process the log string
           }
         } catch (error) {
           console.error('Error processing log message:', error);
@@ -43,6 +44,22 @@ export class LogService {
     });
   }
 
+  // Handle log message and convert it to a string if it's an object
+  private handleLog(log: any) {
+    if (log && log.hasOwnProperty('log')) {
+      const logMessage = log.log;  // Extract the actual log message
+      this.pushLog(logMessage);    // Push only the log message
+    } else {
+      // If the log is already a string (or in a different format), just push it as it is
+      this.pushLog(log);
+    }
+  }
+
+  private pushLog(log: string) {
+    console.log('Pushing log:', log);  // Log the processed log to the console
+    // Push the log string to the logs array or perform other operations as needed
+  }
+
   // Attempt to reconnect if the WebSocket connection is lost
   private reconnect() {
     setTimeout(() => this.connectToLogSocket(), 1000); // Retry after 1 second
@@ -50,6 +67,17 @@ export class LogService {
 
   // Expose logs as an observable (optional if you're using Angular's Observable mechanism)
   getLogs(): Observable<string> {
-    return this.logSocket.asObservable();
+    return new Observable((observer) => {
+      this.logSocket.subscribe({
+        next: (message: any) => {
+          if (message && message.log) {
+            observer.next(message.log);  // Emit only the log message
+          }
+        },
+        error: (err) => observer.error(err),
+        complete: () => observer.complete(),
+      });
+    });
   }
+  
 }
