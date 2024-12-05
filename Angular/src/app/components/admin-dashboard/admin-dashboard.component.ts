@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.scss']
+  styleUrls: ['./admin-dashboard.component.scss'],
 })
 export class AdminDashboardComponent implements OnInit {
   totalTickets: number = 500;
@@ -12,44 +12,75 @@ export class AdminDashboardComponent implements OnInit {
   customerRetrievalRate: number = 43;
   maxTicketCapacity: number = 2;
 
-  // For storing logs or any responses
-  logs: string[] = [];
+  logs: string[] = []; // For storing logs
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // Fetch current configuration from the backend on initialization
-    this.http.get<any>('http://localhost:8080/api/ticketing/config')
-      .subscribe(response => {
+    // Fetch configuration from backend
+    this.http.get<any>('http://localhost:8080/api/ticketing/config').subscribe(
+      (response) => {
         this.totalTickets = response.totalTickets || 500;
         this.ticketReleaseRate = response.ticketReleaseRate || 123;
         this.customerRetrievalRate = response.customerRetrievalRate || 43;
         this.maxTicketCapacity = response.maxTicketCapacity || 2;
-      });
+      },
+      (error) => {
+        console.error('Error fetching configuration:', error);
+      }
+    );
+
+    // Fetch logs from backend as JSON (response type is 'json' by default)
+    this.http.get<any>('http://localhost:8080/api/ticketing/logs').subscribe(
+      (response) => {
+        console.log('Logs received:', response);  // Add this to check the response
+        this.logs = response.logs || []; // Assign logs from the response
+      },
+      (error) => {
+        console.error('Error receiving logs:', error);
+      }
+    );
   }
 
-  // Submit the form data to the backend
+  // Submit form data to the backend
   submitForm(): void {
     const formData = {
       totalTickets: this.totalTickets,
       ticketReleaseRate: this.ticketReleaseRate,
       customerRetrievalRate: this.customerRetrievalRate,
-      maxTicketCapacity: this.maxTicketCapacity
+      maxTicketCapacity: this.maxTicketCapacity,
     };
 
-    this.http.post('http://localhost:8080/api/ticketing/config', formData)
-      .subscribe(response => {
-        this.logs.push('Configuration updated successfully!');
+    this.http.post('http://localhost:8080/api/ticketing/config', formData).subscribe(
+      (response) => {
         console.log('Form Submitted:', response);
-      }, error => {
-        this.logs.push('Error updating configuration');
-        console.error('Error:', error);
-      });
+      },
+      (error) => {
+        console.error('Error updating configuration:', error);
+      }
+    );
   }
 
-  // Stop the ticketing process (Optional, if relevant to your API)
+  // Stop the process and log the action
   stop(): void {
-    console.log('Booking process stopped');
     this.logs.push('Booking process stopped');
+  }
+
+  // Clear logs locally (Frontend)
+  clearLogs(): void {
+    this.logs = []; // Clear the logs array
+  }
+
+  // Optionally, clear logs on the backend
+  clearLogsOnServer(): void {
+    this.http.post('http://localhost:8080/api/ticketing/clear-logs', {}).subscribe(
+      (response) => {
+        console.log('Logs cleared on the server.');
+        this.clearLogs(); // Clear the logs locally after clearing on the server
+      },
+      (error) => {
+        console.error('Error clearing logs on the server:', error);
+      }
+    );
   }
 }

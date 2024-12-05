@@ -34,6 +34,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()  // Allow public access to authentication-related endpoints
+                        .requestMatchers("/api/ticketing/config", "/api/ticketing/logs","/logs").permitAll()  // Allow public access to these specific endpoints
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )

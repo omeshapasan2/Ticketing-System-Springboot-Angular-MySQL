@@ -22,9 +22,11 @@
   </div>
 
   <div class="logs-container">
-    <h2>Logs</h2>
+    <h2>Real-Time Logs</h2>
     <div class="logs">
-      <div *ngFor="let log of logs">{{ log }}</div>
+      <div *ngFor="let log of logs">{{ log }}</div>  <!-- Loop through logs and display them -->
     </div>
+    <button type="button" (click)="clearLogs()">Clear Logs (Frontend)</button>
+    <button type="button" (click)="clearLogsOnServer()">Clear Logs (Server)</button>
   </div>
 </div>

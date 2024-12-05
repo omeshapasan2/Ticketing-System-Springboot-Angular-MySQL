@@ -12,6 +12,8 @@ import { LoginComponent } from './components/login/login.component';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { AuthService } from './services/auth.service';
+import { LogService } from './services/log.service';
 
 
 @NgModule({
