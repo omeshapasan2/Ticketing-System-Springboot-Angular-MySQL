@@ -38,14 +38,7 @@ public class Configuration {
         this.maxTicketCapacity=maxTicketCapacity;
     }
 
+    // Following method moved to -> LogManager class
 //    method to load json files
-//    public static Configuration loadFromJson(String filepath){
-//        //
-//    }
-
-//    method to load json files
-//    public void saveToJson(String filepath){
-//
-//    }
 
 }

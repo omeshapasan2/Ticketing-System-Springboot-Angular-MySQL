@@ -14,12 +14,12 @@ public class LogManager {
     private static final String filename = "DataFiles/Logs.txt"; // Path to the log file
     private static final List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
 
-    // Retrieve all logs
+    // retrieve all logs
     public static List<String> getLogs() {
         return new ArrayList<>(logs);
     }
 
-    // Clear logs both in memory and in the log file
+    // clear logs in memory and in the log file
     public static void clearLogs() {
         synchronized (logs) {
             logs.clear();
@@ -27,7 +27,7 @@ public class LogManager {
         clearLogFile();
     }
 
-    // Add a log message, broadcast it to WebSocket clients, and save it to the file
+    // Add a log message > broadcast it to WebSocket clients > save it to the file
     public static void addLog(String logMessage) {
         synchronized (logs) {
             logs.add(logMessage);
@@ -72,7 +72,7 @@ public class LogManager {
     private static void clearLogFile() {
         synchronized (filename) {
             try (FileWriter writer = new FileWriter(filename)) {
-                // Writing with no content clears the file
+                // empty line to clear the file
             } catch (IOException e) {
                 System.err.println("Error clearing log file: " + filename);
                 e.printStackTrace();

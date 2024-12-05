@@ -13,21 +13,20 @@ export class LogService {
   }
 
   private connectToLogSocket() {
-    // Ensure correct WebSocket URL is provided (change 'localhost' to your server's address)
+    // connect to the WebSocket server
     this.logSocket = new WebSocketSubject('ws://localhost:8080/logs');
 
-    // Subscribe to the WebSocket message stream
+    // subscribe to WebSocket messages
     this.logSocket.subscribe({
       next: (message: any) => {
         try {
-          // Check if the message is already an object and stringify it if necessary
+          // process log message if it's an object or string
           if (typeof message === 'object') {
             console.log('New log received:', message);
-            this.handleLog(message);  // Process the log object
+            this.handleLog(message);  
           } else if (typeof message === 'string') {
-            // If message is a string, directly log it
             console.log('New log received:', message);
-            this.pushLog(message);  // Process the log string
+            this.pushLog(message); 
           }
         } catch (error) {
           console.error('Error processing log message:', error);
@@ -35,43 +34,42 @@ export class LogService {
       },
       error: (err) => {
         console.error('WebSocket error:', err);
-        this.reconnect();  // Attempt to reconnect if an error occurs
+        this.reconnect();  // try to reconnect on error
       },
       complete: () => {
         console.log('WebSocket connection closed');
-        this.reconnect();  // Attempt to reconnect if the connection is closed
+        this.reconnect();  // reconnect if the connection closes
       },
     });
   }
 
-  // Handle log message and convert it to a string if it's an object
+  // process log message and extract log string
   private handleLog(log: any) {
     if (log && log.hasOwnProperty('log')) {
-      const logMessage = log.log;  // Extract the actual log message
-      this.pushLog(logMessage);    // Push only the log message
+      const logMessage = log.log;  // get the log message
+      this.pushLog(logMessage);    // push the log message
     } else {
-      // If the log is already a string (or in a different format), just push it as it is
+      // if log is a string, directly push it
       this.pushLog(log);
     }
   }
 
   private pushLog(log: string) {
-    console.log('Pushing log:', log);  // Log the processed log to the console
-    // Push the log string to the logs array or perform other operations as needed
+    console.log('Pushing log:', log);  // log the message to the console
   }
 
-  // Attempt to reconnect if the WebSocket connection is lost
+  // reconnect to the WebSocket after a 1sec
   private reconnect() {
-    setTimeout(() => this.connectToLogSocket(), 1000); // Retry after 1 second
+    setTimeout(() => this.connectToLogSocket(), 1000);
   }
 
-  // Expose logs as an observable (optional if you're using Angular's Observable mechanism)
+  // expose logs to other parts of the app
   getLogs(): Observable<string> {
     return new Observable((observer) => {
       this.logSocket.subscribe({
         next: (message: any) => {
           if (message && message.log) {
-            observer.next(message.log);  // Emit only the log message
+            observer.next(message.log);
           }
         },
         error: (err) => observer.error(err),
@@ -79,5 +77,4 @@ export class LogService {
       });
     });
   }
-  
 }

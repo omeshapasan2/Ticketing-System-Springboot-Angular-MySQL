@@ -1,7 +1,5 @@
-// src/app/components/admin-dashboard/admin-dashboard.component.ts
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LogService } from '../../services/log.service';  // Correct path to LogService
+import { LogService } from '../../services/log.service';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
@@ -16,33 +14,32 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   customerRetrievalRate: number = 43;
   maxTicketCapacity: number = 2;
 
-  logs: string[] = []; // For storing logs
-  private logSubscription!: Subscription;  // For unsubscribing from the log stream
+  logs: string[] = []; 
+  private logSubscription!: Subscription;
 
   constructor(private http: HttpClient, private logService: LogService) {}
 
   ngOnInit(): void {
-    // Fetch initial configuration
     this.http.get<any>('http://localhost:8080/api/ticketing/config').subscribe(
       (response) => {
-        this.totalTickets = response.totalTickets || 500;
-        this.ticketReleaseRate = response.ticketReleaseRate || 123;
-        this.customerRetrievalRate = response.customerRetrievalRate || 43;
-        this.maxTicketCapacity = response.maxTicketCapacity || 2;
+        this.totalTickets = response.totalTickets;
+        this.ticketReleaseRate = response.ticketReleaseRate;
+        this.customerRetrievalRate = response.customerRetrievalRate;
+        this.maxTicketCapacity = response.maxTicketCapacity;
       },
       (error) => {
-        console.error('Error fetching configuration:', error);
+        console.error(error);
       }
     );
 
-    // Subscribe to real-time logs from WebSocket
+    // subscribe to real time logs from websocket
     this.logSubscription = this.logService.getLogs().subscribe(
       (log: string) => {
-        this.logs.push(log);  // Add the received log to the logs array
-        console.log('New log received:', log);  // Optionally log to the console
+        this.logs.push(log);  // put received log in the logs array
+        console.log(log);  // log to the console
       },
       (error) => {
-        console.error('Error receiving logs:', error);
+        console.error(error);
       }
     );
   }
@@ -68,27 +65,27 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         console.log('Form Submitted:', response);
       },
       (error) => {
-        console.error('Error updating configuration:', error);
+        console.error('Error updating config:', error);
       }
     );
   }
 
-  // Stop the process and log the action
+  // Stop the process and log the action (need fix)
   stop(): void {
     this.logs.push('Booking process stopped');
   }
 
-  // Clear logs locally (Frontend)
+  // clear logs on Frontend (need fix)
   clearLogs(): void {
     this.logs = []; // Clear the logs array
   }
 
-  // Optionally, clear logs on the backend
+  // clear logs on the backend (need fix)
   clearLogsOnServer(): void {
     this.http.post('http://localhost:8080/api/ticketing/clear-logs', {}).subscribe(
       (response) => {
         console.log('Logs cleared on the server.');
-        this.clearLogs(); // Clear the logs locally after clearing on the server
+        this.clearLogs(); 
       },
       (error) => {
         console.error('Error clearing logs on the server:', error);

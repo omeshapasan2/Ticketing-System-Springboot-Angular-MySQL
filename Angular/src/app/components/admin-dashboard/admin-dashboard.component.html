@@ -24,7 +24,7 @@
   <div class="logs-container">
     <h2>Real-Time Logs</h2>
     <div class="logs">
-      <div *ngFor="let log of logs">{{ log }}</div>  <!-- Loop through logs and display them -->
+      <div *ngFor="let log of logs">{{ log }}</div>  <!-- for looping through logs and displaying them -->
     </div>
     <button type="button" (click)="clearLogs()">Clear Logs (Frontend)</button>
     <button type="button" (click)="clearLogsOnServer()">Clear Logs (Server)</button>

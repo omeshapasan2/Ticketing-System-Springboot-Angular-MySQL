@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';  // Adjust path if necessary
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,6 @@ export class RegisterComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   register() {
-    // Assuming authService.register() expects the user object with username, password, and role
     this.authService.register(this.user).subscribe(
       () => {
         this.router.navigate(['/login']);

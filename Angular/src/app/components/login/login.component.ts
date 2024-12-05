@@ -16,14 +16,14 @@ export class LoginComponent {
   constructor(
     private authService: AuthService, 
     private router: Router, 
-    private notification: NzNotificationService // Inject the notification service
+    private notification: NzNotificationService
   ) {}
 
   login() {
     this.authService.login(this.credentials).subscribe(
       (user: any) => {
         if (user && user.token) {
-          // Check if we're in the browser before accessing localStorage
+          // check if we are in browser
           if (typeof window !== 'undefined' && window.localStorage) {
             localStorage.setItem('auth_token', user.token);
           }
@@ -42,18 +42,18 @@ export class LoginComponent {
         console.error('Login error: ', error);
         this.errorMessage = 'Login failed. Please check your credentials.';
         
-        // Show error popup with custom styling and position
+        // show error popup
         this.notification.error(
           'ERROR',
           'Bad credentials. Please check your username and password.',
           {
             nzDuration: 5000,
             nzStyle: {
-              backgroundColor: '#ff4d4f', // Red background for error
-              color: 'white',              // White text for contrast
-              fontWeight: 'bold'           // Optional: make text bold for emphasis
+              backgroundColor: '#ff4d4f',
+              color: 'white',              
+              fontWeight: 'bold'           
             },
-            nzPlacement: 'topRight' // Ensure this is set to topRight or other placements
+            nzPlacement: 'topRight'
           }
         );
       }

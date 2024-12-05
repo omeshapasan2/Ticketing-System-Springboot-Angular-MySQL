@@ -15,9 +15,9 @@ public class Customer implements Runnable {
     public void run() {
         while (true) {
             try {
-                Ticket bookedTicket = ticketPool.removeTicket(); // Book a ticket
+                Ticket bookedTicket = ticketPool.removeTicket(); // book a ticket
                 if (bookedTicket != null) {
-                    // Log the ticket booking
+                    // log the ticket booking
                     LogManager.addLog("Customer " + customerId + " booked ticket no: " + bookedTicket.getTicketNumber());
                 }
 

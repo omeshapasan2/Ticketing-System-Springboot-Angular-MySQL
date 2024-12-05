@@ -16,13 +16,13 @@ public class Vendor implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= totalTicketsToGenerate; i++) {
-            Ticket ticket = new Ticket(i); // Create a new Ticket object
-            ticketPool.addTicket(ticket);  // Add the ticket to the pool
+            Ticket ticket = new Ticket(i); // create a new Ticket object
+            ticketPool.addTicket(ticket);  // add the ticket to the pool
 
-            // Log the ticket addition
+            // log the ticket addition
             LogManager.addLog("Vendor " + vendorId + " added ticket no: " + ticket.getTicketNumber());
 
-            // Simulate the rate of ticket release
+            // simulate the rate of ticket release
             try {
                 Thread.sleep(1000 / ticketReleaseRate);
             } catch (InterruptedException e) {

@@ -1,16 +1,20 @@
-/* Reset padding and margin for form elements */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Ensure the background is black */
 body {
   background: black;
 }
 
-/* Container styles */
+.line {
+  background-color: #fdfdfd;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  border-bottom: 3px solid #ddd;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -19,7 +23,6 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Card container */
 .card {
   background-color: rgba(51, 51, 51, 1);
   padding: 40px;
@@ -28,7 +31,6 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Header styles */
 .card-header {
   color: #ffffff;
   background-color: #333;
@@ -41,7 +43,6 @@ body {
   color: #e7e7e7;
 }
 
-/* Form styles */
 .form-group {
   margin-bottom: 16px;
 }
@@ -51,7 +52,7 @@ body {
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #d9d9d9;
-  box-sizing: border-box; /* Make sure padding and border are included in width */
+  box-sizing: border-box;
 }
 
 .form-control:focus {
@@ -59,10 +60,9 @@ body {
   outline: none;
 }
 
-/* Button styles */
 button {
   width: 100%;
-  padding: 10px; /* Ensure padding is consistent with inputs */
+  padding: 10px;
   background-color: black;
   color: white;
   border: none;
@@ -70,8 +70,8 @@ button {
   height: 40px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 10px; /* Optional: add margin for spacing */
-  box-sizing: border-box; /* Include padding and border in width */
+  margin-top: 10px;
+  box-sizing: border-box;
 }
 
 button:hover {

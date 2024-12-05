@@ -12,7 +12,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        // Add the WebSocket handler for logs
+        // add web socket handler for logs
         registry.addHandler(new LogWebSocketHandler(), "/logs")
                 .addInterceptors(new HttpSessionHandshakeInterceptor())
                 .setAllowedOrigins("*");
