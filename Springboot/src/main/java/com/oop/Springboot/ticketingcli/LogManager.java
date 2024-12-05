@@ -33,22 +33,28 @@ public class LogManager {
             logs.add(logMessage);
         }
 
-        // Broadcast to all WebSocket clients
+        // Broadcast to all WebSocket clients as JSON
         synchronized (sessions) {
-            sessions.forEach(session -> {
+            List<WebSocketSession> sessionCopy = new ArrayList<>(sessions);
+            for (WebSocketSession session : sessionCopy) {
                 if (session.isOpen()) {
                     try {
-                        session.sendMessage(new TextMessage(logMessage));
+                        String jsonMessage = "{\"log\": \"" + logMessage + "\"}";
+                        session.sendMessage(new TextMessage(jsonMessage));
                     } catch (IOException e) {
                         System.err.println("Error sending log to WebSocket client: " + e.getMessage());
+                        removeSession(session);
                     }
+                } else {
+                    removeSession(session);
                 }
-            });
+            }
         }
 
         // Write to the log file
         writeLogToFile(logMessage);
     }
+
 
     // Write a log message to the log file
     private static void writeLogToFile(String logMessage) {
