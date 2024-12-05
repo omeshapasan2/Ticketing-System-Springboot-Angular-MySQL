@@ -2,15 +2,16 @@ package com.oop.Springboot.ticketingcli;
 
 public class Main {
 
-    // This is your existing method to run the ticketing process
     public static void runTicketingProcess(Configuration config) {
         int totalTickets = config.getTotalTickets();
         int ticketReleaseRate = config.getTicketReleaseRate();
         int customerRetrievalRate = config.getCustomerRetrievalRate();
         int maxCapacity = config.getMaxTicketCapacity();
 
-        // Initialize the ticket pool
         TicketPool ticketPool = new TicketPool(maxCapacity);
+
+        // Log the start of the ticketing process
+        LogManager.addLog("Starting ticketing process with " + totalTickets + " tickets.");
 
         // Create vendor threads to add tickets to the pool
         for (int i = 0; i < ticketReleaseRate; i++) {
@@ -18,6 +19,7 @@ public class Main {
             Vendor vendor = new Vendor(vendorId, ticketPool, totalTickets, ticketReleaseRate);
             Thread vendorThread = new Thread(vendor);
             vendorThread.start();
+            LogManager.addLog("Vendor " + vendorId + " started.");
         }
 
         // Create customer threads to book tickets from the pool
@@ -26,7 +28,12 @@ public class Main {
             Customer customer = new Customer(customerId, ticketPool, 1000);
             Thread customerThread = new Thread(customer);
             customerThread.start();
+            LogManager.addLog("Customer " + customerId + " started.");
         }
+
+        // Log that the process has been initialized
+        LogManager.addLog("Ticketing process initialized with " +
+                ticketReleaseRate + " vendors and " + customerRetrievalRate + " customers.");
     }
 
     // Main method for running the application as a standalone Java app
@@ -40,5 +47,8 @@ public class Main {
 
         // Run the ticketing process with the sample configuration
         runTicketingProcess(config);
+
+        // Optionally, log that the process is complete
+        LogManager.addLog("Ticketing process complete.");
     }
 }

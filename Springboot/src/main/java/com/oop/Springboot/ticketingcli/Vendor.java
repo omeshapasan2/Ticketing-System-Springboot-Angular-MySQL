@@ -2,11 +2,10 @@ package com.oop.Springboot.ticketingcli;
 
 public class Vendor implements Runnable {
     private final TicketPool ticketPool;
-    private final int vendorId;                // Added vendorId
-    private final int totalTicketsToGenerate;  // Total tickets to generate
-    private final int ticketReleaseRate;       // Rate of ticket release (use for the delay)
+    private final int vendorId;
+    private final int totalTicketsToGenerate;
+    private final int ticketReleaseRate;
 
-    // Updated constructor to accept vendorId
     public Vendor(int vendorId, TicketPool ticketPool, int totalTicketsToGenerate, int ticketReleaseRate) {
         this.vendorId = vendorId;
         this.ticketPool = ticketPool;
@@ -20,11 +19,14 @@ public class Vendor implements Runnable {
             Ticket ticket = new Ticket(i); // Create a new Ticket object
             ticketPool.addTicket(ticket);  // Add the ticket to the pool
 
-            // Simulating the rate of ticket release (adjust sleep time as needed)
+            // Log the ticket addition
+            LogManager.addLog("Vendor " + vendorId + " added ticket no: " + ticket.getTicketNumber());
+
+            // Simulate the rate of ticket release
             try {
-                Thread.sleep(1000 / ticketReleaseRate); // Release tickets based on release rate
+                Thread.sleep(1000 / ticketReleaseRate);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Gracefully handle thread interruption
+                Thread.currentThread().interrupt();
                 break;
             }
         }

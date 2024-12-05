@@ -3,7 +3,7 @@ package com.oop.Springboot.ticketingcli;
 public class Customer implements Runnable {
     private final TicketPool ticketPool;
     private final int customerId;
-    private final int bookingDelay;    // Delay between ticket bookings
+    private final int bookingDelay;
 
     public Customer(int customerId, TicketPool ticketPool, int bookingDelay) {
         this.customerId = customerId;
@@ -16,9 +16,12 @@ public class Customer implements Runnable {
         while (true) {
             try {
                 Ticket bookedTicket = ticketPool.removeTicket(); // Book a ticket
-                System.out.println("Customer " + customerId + " booked ticket no: " + bookedTicket);
+                if (bookedTicket != null) {
+                    // Log the ticket booking
+                    LogManager.addLog("Customer " + customerId + " booked ticket no: " + bookedTicket.getTicketNumber());
+                }
 
-                // wait for 1s
+                // Wait for booking delay (simulate time between bookings)
                 Thread.sleep(bookingDelay);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
