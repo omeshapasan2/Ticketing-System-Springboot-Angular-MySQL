@@ -4,6 +4,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -11,7 +12,8 @@ const routes: Routes = [
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  { path: 'admin-dashboard', component: AdminDashboardComponent }
+  { path: 'admin-dashboard', component: AdminDashboardComponent },
+  { path: 'home', component: HomeComponent }
 ];
 
 @NgModule({

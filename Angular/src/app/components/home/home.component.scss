@@ -1,0 +1,52 @@
+.home-container {
+    text-align: center;
+    margin-top: 20px;
+    color: #fff;
+}
+
+.line {
+    background-color: #fdfdfd;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    border-bottom: 3px solid #ddd;
+}
+  
+.logo-img {
+    height: 10%;
+    width: auto;
+}
+  
+.repo-link {
+    margin-top: 20px;
+}
+  
+.github-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #24292f;
+    color: #fff;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    z-index: 1;
+}
+  
+.github-button:hover {
+    background-color: #333;
+}
+  
+.github-logo {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+  
+.description {
+    margin-top: 30px;
+    font-size: 16px;
+    color: #f0f0f0;
+    padding: 0 20px;
+}

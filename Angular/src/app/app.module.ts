@@ -14,6 +14,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AuthService } from './services/auth.service';
 import { LogService } from './services/log.service';
+import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { LogService } from './services/log.service';
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
