@@ -87,16 +87,12 @@ public class TicketingController {
     private boolean isProcessRunning = true;
 
     @PostMapping("/stop")
-    public ResponseEntity<Void> stopTicketingProcess() {
+    public ResponseEntity<String> stopTicketingProcess() {
         try {
-            isProcessRunning = false; // Stop the process
-            LogManager.addLog("Booking process stopped.");
-
-            // Return a success response
-            return ResponseEntity.ok().build();
+            Main.stopTicketingProcess();
+            return ResponseEntity.ok("Ticketing process stopped successfully!");
         } catch (Exception e) {
-            // Return an error response if something goes wrong
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(500).body("Error occurred while stopping the ticketing process: " + e.getMessage());
         }
     }
 }

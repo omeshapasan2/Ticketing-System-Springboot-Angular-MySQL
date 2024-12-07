@@ -1,0 +1,17 @@
+Configuration updated successfully!
+Starting ticketing process with 50 tickets.
+Vendor 1 started.
+Vendor 1 added ticket no: 1
+Vendor 2 added ticket no: 1
+Vendor 2 started.
+Vendor 3 started.
+Vendor 3 added ticket no: 1
+Customer 1 started.
+Customer 1 booked ticket no: 1
+Customer 2 started.
+Customer 2 booked ticket no: 1
+Ticketing process initialized with 3 vendors and 2 customers.
+Vendor 1 added ticket no: 2
+Vendor 2 added ticket no: 2
+Vendor 3 added ticket no: 2
+Ticketing process stopped.
