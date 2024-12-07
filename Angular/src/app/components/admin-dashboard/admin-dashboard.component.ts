@@ -72,24 +72,21 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   // Stop the process and log the action (need fix)
   stop(): void {
-    this.logs.push('Booking process stopped');
+    this.http.post('http://localhost:8080/api/ticketing/stop', {}).subscribe(
+      (response) => {
+        console.log('Booking process stopped:', response);
+        this.logs.push('Booking process stopped successfully!'); // success message
+      },
+      (error) => {
+        console.error('Error stopping the booking process:', error);
+        this.logs.push('Failed to stop the booking process.'); // error message
+      }
+    );
   }
 
-  // clear logs on Frontend (need fix)
+  // clear logs
   clearLogs(): void {
     this.logs = []; // Clear the logs array
   }
 
-  // clear logs on the backend (need fix)
-  clearLogsOnServer(): void {
-    this.http.post('http://localhost:8080/api/ticketing/clear-logs', {}).subscribe(
-      (response) => {
-        console.log('Logs cleared on the server.');
-        this.clearLogs(); 
-      },
-      (error) => {
-        console.error('Error clearing logs on the server:', error);
-      }
-    );
-  }
 }
