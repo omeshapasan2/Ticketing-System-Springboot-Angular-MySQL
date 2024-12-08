@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()  // Allow login
-                        .requestMatchers("/api/ticketing/config", "/api/ticketing/logs","/logs","/api/ticketing/stop").permitAll()  // Allow dashboard logging and websocket
+                        .requestMatchers("/api/ticketing/config", "/api/ticketing/logs","/logs","/api/ticketing/stop","/api/ticketing-status","/ws/**").permitAll()  // Allow dashboard logging and websocket
                         .anyRequest().authenticated()
                 )
                 .formLogin().disable()

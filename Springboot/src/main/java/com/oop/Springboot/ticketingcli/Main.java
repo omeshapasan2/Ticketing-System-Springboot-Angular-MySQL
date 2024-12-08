@@ -1,5 +1,7 @@
 package com.oop.Springboot.ticketingcli;
 
+import com.oop.Springboot.controller.TicketStatusController;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -46,6 +48,8 @@ public class Main {
         }
 
         LogManager.addLog("Ticketing process initialized with " + ticketReleaseRate + " vendors and " + customerRetrievalRate + " customers.");
+
+        TicketStatusController.updateTicketingStatus(totalTickets, maxCapacity);
     }
 
     // stop the ticketing process
