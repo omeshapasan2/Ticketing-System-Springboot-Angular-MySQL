@@ -1,5 +1,8 @@
 # Ticketing-System-Springboot-Angular-MySQL
 
+![Alt Text](![image](https://github.com/user-attachments/assets/9bf636b4-d0b1-4234-9681-8192c9de9801)
+)
+
 ## Introduction
 
 This is a **Ticketing System** designed to simulate a real-time ticket booking process. The system includes:
