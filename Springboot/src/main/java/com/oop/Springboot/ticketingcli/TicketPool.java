@@ -17,6 +17,7 @@ public class TicketPool {
         if (tickets.size() < maxCapacity) {
             tickets.add(ticket); // add Ticket object to the list
             LogManager.addLog("Vendor added ticket no: " + ticket.getTicketNumber());
+            LogManager.addLog("Current ticket count: " + tickets.size());
             notifyAll();
         } else {
             LogManager.addLog("Ticket Pool is full. Vendor couldn't add ticket no: " + ticket.getTicketNumber());
@@ -34,6 +35,7 @@ public class TicketPool {
         }
         Ticket ticket = tickets.remove(0); // remove and return Ticket object
         LogManager.addLog("Customer booked ticket no: " + ticket.getTicketNumber());
+        LogManager.addLog("Current ticket count: " + tickets.size());
         return ticket;
     }
 
