@@ -157,5 +157,18 @@ Once logged in, you can:
 
 
 ---
+Home Page
+![image](https://github.com/user-attachments/assets/cebc68dc-1546-4b9f-a41b-a552c32b3d56)
+
+Register Page
+![image](https://github.com/user-attachments/assets/7ba032a0-81b7-41e3-9e54-9e5e5438c82b)
+
+Login Page
+![image](https://github.com/user-attachments/assets/32335a7a-e80c-4a7e-874c-57ce2c70a55b)
+
+Dashboard Page
+![image](https://github.com/user-attachments/assets/2992115b-f56c-4a32-8d8a-5cd7c7e21bf3)
+
+
 
 
