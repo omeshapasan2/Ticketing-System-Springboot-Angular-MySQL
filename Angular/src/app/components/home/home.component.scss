@@ -10,17 +10,24 @@
     text-align: center;
     border-bottom: 3px solid #ddd;
 }
-  
+
 .logo-img {
-    height: 10%;
+    height: 5%;
     width: auto;
 }
-  
-.repo-link {
+
+.button-wrapper {
+    display: flex;  /* Display buttons side by side */
+    justify-content: center;  /* Center them horizontally */
+    gap: 20px;  /* Space between buttons */
     margin-top: 20px;
 }
-  
-.github-button {
+
+.repo-link, .yt-link {
+    /* No need to adjust individual buttons */
+}
+
+.github-button, .youtube-button {
     display: inline-flex;
     align-items: center;
     padding: 10px 15px;
@@ -32,18 +39,18 @@
     transition: background-color 0.3s;
     z-index: 1;
 }
-  
-.github-button:hover {
+
+.github-button:hover, .youtube-button:hover {
     background-color: #333;
 }
-  
-.github-logo {
+
+.github-logo, .youtube-logo {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     margin-right: 10px;
 }
-  
+
 .description {
     margin-top: 30px;
     font-size: 16px;

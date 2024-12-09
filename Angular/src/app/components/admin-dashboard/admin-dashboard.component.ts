@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LogService } from '../../services/log.service';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { TicketingStatusService } from '../../services/ticketing-status.service';
-import { TicketingStatus } from '../../services/ticketing-status.service';
+import { WebSocketService } from '../../services/web-socket.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -11,18 +10,21 @@ import { TicketingStatus } from '../../services/ticketing-status.service';
   styleUrls: ['./admin-dashboard.component.scss'],
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
+  // Ticket-related properties
+  currentTicketCount: number = 0;
+  maxTicketCapacity: number = 1000;
   totalTickets: number = 500;
   ticketReleaseRate: number = 123;
   customerRetrievalRate: number = 43;
-  maxTicketCapacity: number = 2;
 
-  logs: string[] = []; 
+  logs: string[] = [];
   private logSubscription!: Subscription;
+  private wsSubscription!: Subscription; // WebSocket subscription
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private logService: LogService,
-    private ticketingStatusService: TicketingStatusService // Combine both constructors here
+    private webSocketService: WebSocketService // Inject WebSocketService
   ) {}
 
   ngOnInit(): void {
@@ -39,29 +41,49 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       }
     );
 
-    // Fetch ticketing status to get the current ticket count
-    this.fetchTicketingStatus();
-
-    // Subscribe to real-time logs from websocket
+    // Subscribe to real-time logs from LogService
     this.logSubscription = this.logService.getLogs().subscribe(
-      (log: string) => {
-        this.logs.push(log);  // Put received log in the logs array
-        console.log(log);  // Log to the console
+      (logs: string[]) => {
+        this.logs = logs; // Set the logs
       },
       (error) => {
         console.error(error);
       }
     );
+
+    // Connect to WebSocket service and subscribe for ticket count updates
+    this.webSocketService.connect('ws://localhost:8080/ticket-progress');
+    this.wsSubscription = this.webSocketService.getMessages().subscribe(
+      (message: any) => {
+        if (message && message.currentSize) {
+          this.currentTicketCount = message.currentSize;
+        }
+        if (message && message.maxCapacity) {
+          this.maxTicketCapacity = message.maxCapacity;
+        }
+      },
+      (error) => {
+        console.error('WebSocket error:', error);
+      }
+    );
   }
 
   ngOnDestroy(): void {
-    // Clean up the subscription when the component is destroyed
     if (this.logSubscription) {
       this.logSubscription.unsubscribe();
     }
+    if (this.wsSubscription) {
+      this.wsSubscription.unsubscribe();
+    }
+    this.webSocketService.disconnect(); // Close WebSocket connection
   }
 
-  // Submit form data to the backend
+  // Compute the progress percentage for ticket pool
+  get progress(): number {
+    return (this.currentTicketCount / this.maxTicketCapacity) * 100;
+  }
+
+  // Submit form data to the backend to update ticketing configuration
   submitForm(): void {
     const formData = {
       totalTickets: this.totalTickets,
@@ -80,7 +102,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Stop the process and log the action
+  // Stop the booking process and log the action
   stop(): void {
     this.http.post('http://localhost:8080/api/ticketing/stop', {}).subscribe(
       (response) => {
@@ -95,18 +117,5 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   // Clear logs
   clearLogs(): void {
     this.logs = []; // Clear the logs array
-  }
-
-  // Fetch the current ticketing status
-  fetchTicketingStatus(): void {
-    this.ticketingStatusService.getTicketingStatus().subscribe(
-      (status: TicketingStatus) => {
-        this.totalTickets = status.totalTickets;  // Update current ticket count
-        this.maxTicketCapacity = status.maxTicketCapacity;
-      },
-      (error) => {
-        console.error('Error fetching ticketing status:', error);
-      }
-    );
   }
 }

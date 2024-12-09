@@ -1,32 +1,28 @@
 import { Injectable } from '@angular/core';
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LogService {
   private logSocket!: WebSocketSubject<any>;
+  private logsSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   constructor() {
     this.connectToLogSocket();
   }
 
   private connectToLogSocket() {
-    // connect to the WebSocket server
     this.logSocket = new WebSocketSubject('ws://localhost:8080/logs');
-
-    // subscribe to WebSocket messages
+    
     this.logSocket.subscribe({
       next: (message: any) => {
         try {
-          // process log message if it's an object or string
-          if (typeof message === 'object') {
-            console.log('New log received:', message);
-            this.handleLog(message);  
-          } else if (typeof message === 'string') {
-            console.log('New log received:', message);
-            this.pushLog(message); 
+          if (typeof message === 'string') {
+            this.pushLog(message);
+          } else if (typeof message === 'object') {
+            this.handleLog(message);
           }
         } catch (error) {
           console.error('Error processing log message:', error);
@@ -34,47 +30,33 @@ export class LogService {
       },
       error: (err) => {
         console.error('WebSocket error:', err);
-        this.reconnect();  // try to reconnect on error
+        this.reconnect();
       },
       complete: () => {
         console.log('WebSocket connection closed');
-        this.reconnect();  // reconnect if the connection closes
+        this.reconnect();
       },
     });
   }
 
-  // process log message and extract log string
   private handleLog(log: any) {
     if (log && log.hasOwnProperty('log')) {
-      const logMessage = log.log;  // get the log message
-      this.pushLog(logMessage);    // push the log message
-    } else {
-      // if log is a string, directly push it
-      this.pushLog(log);
+      const logMessage = log.log;
+      this.pushLog(logMessage);
     }
   }
 
   private pushLog(log: string) {
-    console.log('Pushing log:', log);  // log the message to the console
+    console.log('Pushing log:', log);
+    const currentLogs = this.logsSubject.value;
+    this.logsSubject.next([...currentLogs, log]);
   }
 
-  // reconnect to the WebSocket after a 1sec
   private reconnect() {
     setTimeout(() => this.connectToLogSocket(), 1000);
   }
 
-  // expose logs to other parts of the app
-  getLogs(): Observable<string> {
-    return new Observable((observer) => {
-      this.logSocket.subscribe({
-        next: (message: any) => {
-          if (message && message.log) {
-            observer.next(message.log);
-          }
-        },
-        error: (err) => observer.error(err),
-        complete: () => observer.complete(),
-      });
-    });
+  getLogs(): Observable<string[]> {
+    return this.logsSubject.asObservable();
   }
 }

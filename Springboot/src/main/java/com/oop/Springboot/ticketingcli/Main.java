@@ -1,7 +1,5 @@
 package com.oop.Springboot.ticketingcli;
 
-import com.oop.Springboot.controller.TicketStatusController;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -24,6 +22,7 @@ public class Main {
         TicketPool ticketPool = new TicketPool(maxCapacity);
 
         LogManager.addLog("Starting ticketing process with " + totalTickets + " tickets.");
+        System.out.println("Starting ticketing process with " + totalTickets + " tickets.");
 
         isRunning = true;
 
@@ -35,6 +34,7 @@ public class Main {
             vendorThread.start();
             vendorThreads.add(vendorThread);
             LogManager.addLog("Vendor " + vendorId + " started.");
+            System.out.println("Vendor " + vendorId + " started.");
         }
 
         // create customer threads to book tickets
@@ -45,11 +45,11 @@ public class Main {
             customerThread.start();
             customerThreads.add(customerThread);
             LogManager.addLog("Customer " + customerId + " started.");
+            System.out.println("Customer " + customerId + " started.");
         }
 
         LogManager.addLog("Ticketing process initialized with " + ticketReleaseRate + " vendors and " + customerRetrievalRate + " customers.");
-
-        TicketStatusController.updateTicketingStatus(totalTickets, maxCapacity);
+        System.out.println("Ticketing process initialized with " + ticketReleaseRate + " vendors and " + customerRetrievalRate + " customers.");
     }
 
     // stop the ticketing process
@@ -66,6 +66,7 @@ public class Main {
         }
 
         LogManager.addLog("Ticketing process stopped.");
+        System.out.println("Ticketing process stopped.");
     }
 
     // main method to run the app
@@ -149,6 +150,7 @@ public class Main {
         runTicketingProcess(config);
 
         LogManager.addLog("Ticketing process complete.");
+        System.out.println("Ticketing process complete.");
 
         scanner.close();
     }

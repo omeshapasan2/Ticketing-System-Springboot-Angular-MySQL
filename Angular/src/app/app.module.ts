@@ -15,6 +15,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AuthService } from './services/auth.service';
 import { LogService } from './services/log.service';
 import { HomeComponent } from './components/home/home.component';
+import { WebSocketService } from './services/web-socket.service';
+import { WebSocketMessage } from 'rxjs/internal/observable/dom/WebSocketSubject';
 
 
 @NgModule({

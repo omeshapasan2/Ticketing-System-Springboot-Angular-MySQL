@@ -19,6 +19,7 @@ public class Customer implements Runnable {
                 if (bookedTicket != null) {
                     // log the ticket booking
                     LogManager.addLog("Customer " + customerId + " booked ticket no: " + bookedTicket.getTicketNumber());
+                    System.out.println("Customer " + customerId + " booked ticket no: " + bookedTicket.getTicketNumber());
                 }
 
                 // Wait for booking delay (simulate time between bookings)

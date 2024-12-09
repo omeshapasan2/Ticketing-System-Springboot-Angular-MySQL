@@ -21,6 +21,7 @@ public class Vendor implements Runnable {
 
             // log the ticket addition
             LogManager.addLog("Vendor " + vendorId + " added ticket no: " + ticket.getTicketNumber());
+            System.out.println("Vendor " + vendorId + " added ticket no: " + ticket.getTicketNumber());
 
             // simulate the rate of ticket release
             try {
@@ -30,6 +31,7 @@ public class Vendor implements Runnable {
                 break;
             }
         }
+        LogManager.addLog("Vendor " + vendorId + " finished generating all tickets.");
         System.out.println("Vendor " + vendorId + " finished generating all tickets.");
     }
 }

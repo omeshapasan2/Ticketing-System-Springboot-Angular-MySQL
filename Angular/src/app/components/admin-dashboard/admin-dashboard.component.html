@@ -73,13 +73,19 @@
     <button type="button" (click)="clearLogs()">Clear Logs (Frontend)</button>
   </div>
 
-  <!-- Vertical Progress Bars -->
+  <!-- Vertical Progress Bars
   <div>
     <p>Total Tickets: {{ totalTickets }}</p>
     <p>Maximum Ticket Capacity: {{ maxTicketCapacity }}</p>
   </div>
   <div>
     <h3>Current Ticket Count: {{ totalTickets }}</h3>
+  </div> -->
+
+  <div>
+    <h3>Current Ticket Count: {{ currentTicketCount }}</h3>
+    <progress [value]="progress" max="100"></progress>
   </div>
+  
   
 </div>
