@@ -1,3 +1,4 @@
+Configuration updated successfully!
 Starting ticketing process with 100 tickets.
 Vendor 1 started.
 Vendor added ticket no: 1
@@ -10,14 +11,14 @@ Current ticket count: 0
 Customer 1 booked ticket no: 1
 Vendor added ticket no: 2
 Current ticket count: 1
-Vendor 1 added ticket no: 2
 Customer booked ticket no: 2
+Vendor 1 added ticket no: 2
 Current ticket count: 0
 Customer 1 booked ticket no: 2
 Vendor added ticket no: 3
 Current ticket count: 1
-Customer booked ticket no: 3
 Vendor 1 added ticket no: 3
+Customer booked ticket no: 3
 Current ticket count: 0
 Customer 1 booked ticket no: 3
 Vendor added ticket no: 4
@@ -50,119 +51,5 @@ Vendor 1 added ticket no: 8
 Customer booked ticket no: 8
 Current ticket count: 0
 Customer 1 booked ticket no: 8
-Vendor added ticket no: 9
-Current ticket count: 1
-Vendor 1 added ticket no: 9
-Customer booked ticket no: 9
-Current ticket count: 0
-Customer 1 booked ticket no: 9
-Vendor added ticket no: 10
-Current ticket count: 1
-Vendor 1 added ticket no: 10
-Customer booked ticket no: 10
-Current ticket count: 0
-Customer 1 booked ticket no: 10
-Vendor added ticket no: 11
-Current ticket count: 1
-Vendor 1 added ticket no: 11
-Customer booked ticket no: 11
-Current ticket count: 0
-Customer 1 booked ticket no: 11
-Vendor added ticket no: 12
-Current ticket count: 1
-Vendor 1 added ticket no: 12
-Customer booked ticket no: 12
-Current ticket count: 0
-Customer 1 booked ticket no: 12
-Vendor added ticket no: 13
-Current ticket count: 1
-Vendor 1 added ticket no: 13
-Customer booked ticket no: 13
-Current ticket count: 0
-Customer 1 booked ticket no: 13
-Vendor added ticket no: 14
-Current ticket count: 1
-Vendor 1 added ticket no: 14
-Customer booked ticket no: 14
-Current ticket count: 0
-Customer 1 booked ticket no: 14
-Vendor added ticket no: 15
-Current ticket count: 1
-Vendor 1 added ticket no: 15
-Customer booked ticket no: 15
-Current ticket count: 0
-Customer 1 booked ticket no: 15
-Vendor added ticket no: 16
-Current ticket count: 1
-Vendor 1 added ticket no: 16
-Customer booked ticket no: 16
-Current ticket count: 0
-Customer 1 booked ticket no: 16
-Vendor added ticket no: 17
-Current ticket count: 1
-Vendor 1 added ticket no: 17
-Customer booked ticket no: 17
-Current ticket count: 0
-Customer 1 booked ticket no: 17
-Vendor added ticket no: 18
-Current ticket count: 1
-Vendor 1 added ticket no: 18
-Customer booked ticket no: 18
-Current ticket count: 0
-Customer 1 booked ticket no: 18
-Vendor added ticket no: 19
-Current ticket count: 1
-Vendor 1 added ticket no: 19
-Customer booked ticket no: 19
-Current ticket count: 0
-Customer 1 booked ticket no: 19
-Vendor added ticket no: 20
-Current ticket count: 1
-Vendor 1 added ticket no: 20
-Customer booked ticket no: 20
-Current ticket count: 0
-Customer 1 booked ticket no: 20
-Vendor added ticket no: 21
-Current ticket count: 1
-Vendor 1 added ticket no: 21
-Customer booked ticket no: 21
-Current ticket count: 0
-Customer 1 booked ticket no: 21
-Vendor added ticket no: 22
-Current ticket count: 1
-Vendor 1 added ticket no: 22
-Customer booked ticket no: 22
-Current ticket count: 0
-Customer 1 booked ticket no: 22
-Vendor added ticket no: 23
-Current ticket count: 1
-Vendor 1 added ticket no: 23
-Customer booked ticket no: 23
-Current ticket count: 0
-Customer 1 booked ticket no: 23
-Vendor added ticket no: 24
-Current ticket count: 1
-Vendor 1 added ticket no: 24
-Customer booked ticket no: 24
-Current ticket count: 0
-Customer 1 booked ticket no: 24
-Vendor added ticket no: 25
-Current ticket count: 1
-Vendor 1 added ticket no: 25
-Customer booked ticket no: 25
-Current ticket count: 0
-Customer 1 booked ticket no: 25
-Vendor added ticket no: 26
-Current ticket count: 1
-Vendor 1 added ticket no: 26
-Customer booked ticket no: 26
-Current ticket count: 0
-Customer 1 booked ticket no: 26
-Vendor added ticket no: 27
-Current ticket count: 1
-Vendor 1 added ticket no: 27
-Customer booked ticket no: 27
-Current ticket count: 0
-Customer 1 booked ticket no: 27
 Ticketing process stopped.
 Vendor 1 finished generating all tickets.

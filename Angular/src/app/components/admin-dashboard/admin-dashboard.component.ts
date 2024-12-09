@@ -76,7 +76,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    // Ensure the ViewChild is initialized before calling scrollToBottom
     if (this.logsContainer) {
       this.scrollToBottom();
     }
@@ -89,15 +88,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.wsSubscription) {
       this.wsSubscription.unsubscribe();
     }
-    this.webSocketService.disconnect(); // Close WebSocket connection
+    this.webSocketService.disconnect(); // close web socket
   }
 
-  // Compute the progress percentage for ticket pool
+  // progress bar
   get progress(): number {
     return (this.currentTicketCount / this.maxTicketCapacity) * 100;
   }
 
-  // Submit form data to the backend to update ticketing configuration
+  // submit form data to the backend to update ticketing configuration
   submitForm(): void {
     const formData = {
       totalTickets: this.totalTickets,
@@ -109,7 +108,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
     this.http.post('http://localhost:8080/api/ticketing/config', formData).subscribe(
       (response) => {
         console.log('Form Submitted:', response);
-        this.scrollToBottom(); // Scroll to bottom after form submission
+        this.scrollToBottom(); // scroll to bottom
       },
       (error) => {
         console.error('Error updating config:', error);
@@ -129,7 +128,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
     );
   }
 
-  // Clear logs
+  // clear logs
   clearLogs(): void {
     this.logs = []; // Clear the logs array
   }
@@ -147,5 +146,54 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
   // Detect when logs change and scroll to the bottom
   private onLogsChanged(): void {
     this.scrollToBottom();
+  }
+
+  // Save configuration to JSON file
+  saveToJson(): void {
+    const configData = {
+      totalTickets: this.totalTickets,
+      ticketReleaseRate: this.ticketReleaseRate,
+      customerRetrievalRate: this.customerRetrievalRate,
+      maxTicketCapacity: this.maxTicketCapacity,
+    };
+
+    const blob = new Blob([JSON.stringify(configData, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'ticketing-config.json';
+    link.click();
+  }
+
+  // Load configuration from a JSON file
+  loadFromJson(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('Selected file:', file); // Log the file info
+      if (file.type === 'application/json') {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          try {
+            const configData = JSON.parse(e.target.result);
+            console.log('Loaded configuration:', configData); // Log loaded config
+            this.totalTickets = configData.totalTickets || 0;
+            this.ticketReleaseRate = configData.ticketReleaseRate || 0;
+            this.customerRetrievalRate = configData.customerRetrievalRate || 0;
+            this.maxTicketCapacity = configData.maxTicketCapacity || 0;
+          } catch (err) {
+            console.error('Error parsing JSON:', err); // Log JSON parsing errors
+            alert('Invalid JSON file');
+          }
+        };
+        reader.onerror = (err) => {
+          console.error('Error reading file:', err); // Log file read errors
+          alert('Error reading the file');
+        };
+        reader.readAsText(file);
+      } else {
+        alert('Please select a valid JSON file');
+      }
+    } else {
+      alert('No file selected');
+    }
   }
 }

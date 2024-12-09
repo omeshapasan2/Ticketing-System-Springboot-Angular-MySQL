@@ -60,8 +60,35 @@
         Maximum Ticket Capacity is required and must be greater than 0.
       </div>
 
-      <button type="submit" [disabled]="form.invalid">Start</button>
-      <button type="button" (click)="stop()">Stop</button>
+      <div class="button-group">
+        <div class="button-container">
+          <button type="submit" [disabled]="form.invalid">
+            <img src="https://img.icons8.com/?size=100&id=398&format=png&color=1890FF" alt="Start Icon" />
+            Start
+          </button>
+        </div>
+        <div class="button-container">
+          <button type="button" (click)="stop()">
+            <img src="https://img.icons8.com/?size=100&id=400&format=png&color=1890FF" alt="Stop Icon" />
+            Stop
+          </button>
+        </div>
+        <div class="button-container">
+          <button type="button" (click)="saveToJson()">
+            <img src="https://img.icons8.com/?size=100&id=18765&format=png&color=1890FF" alt="Save Icon" />
+            Save
+          </button>
+        </div>
+        <div class="button-container">
+          <button type="button" (click)="fileInput.click()">
+            <img src="https://img.icons8.com/?size=100&id=DFXf9CtoAX6w&format=png&color=1890FF" alt="Load Icon" />
+            Load
+          </button>
+        </div>
+      </div>
+
+      <!-- Hidden file input for selecting the configuration file -->
+      <input #fileInput type="file" (change)="loadFromJson($event)" style="display: none" />
     </form>
   </div>
 
@@ -70,10 +97,21 @@
     <div class="logs">
       <div *ngFor="let log of logs" #logItem>{{ log }}</div>
     </div>
-    <button type="button" (click)="clearLogs()">Clear Logs</button>
-    <button type="button" (click)="scrollToBottom()">Scroll to Bottom</button>
-  </div>  
-  
+    <div class="button-group">
+      <div class="button-container">
+        <button type="button" (click)="clearLogs()">
+          <img src="https://img.icons8.com/?size=100&id=37422&format=png&color=1890FF" alt="Clear Icon" />
+          Clear Logs
+        </button>
+      </div>
+      <div class="button-container">
+        <button type="button" (click)="scrollToBottom()">
+          <img src="https://img.icons8.com/?size=100&id=26193&format=png&color=1890FF" alt="Scroll to Bottom Icon" />
+          Scroll to Bottom
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div class="progress-container">
     <h3>Current Ticket Count: {{ currentTicketCount }}</h3>

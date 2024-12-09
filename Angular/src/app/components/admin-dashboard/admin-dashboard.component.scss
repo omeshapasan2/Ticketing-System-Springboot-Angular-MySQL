@@ -25,6 +25,7 @@ h1 {
     margin: 50px auto;
     max-width: 1200px;
     align-items: flex-start;
+    gap: 30px;
 }
 
 .form-container {
@@ -33,8 +34,6 @@ h1 {
     width: 45%;
     border-radius: 8px;
 }
-
-// Logs Container
 
 .logs-container {
     background-color: #333;
@@ -46,17 +45,14 @@ h1 {
     flex-direction: column;
     height: 525px;
     overflow-y: auto;
-  }
-  
-  .logs {
-    flex: 1; /* Allow logs container to fill available space */
-    padding: 10px;
-    overflow-y: auto; /* Ensure scrolling */
-    background-color: #222;
-  }
-  
+}
 
-// Form
+.logs {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #222;
+}
 
 form {
     display: flex;
@@ -73,12 +69,58 @@ input {
 }
 
 button {
-    padding: 10px;
+    padding: 8px 16px;
     margin-top: 10px;
     cursor: pointer;
+    background-color: #2e2f2f;
+    border: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    flex-direction: column;
 }
 
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 
+.button-container {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button img {
+    width: 30px !important;
+    height: 30px !important;
+    margin-bottom: 8px;
+}
+
+button span {
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #666363;  /* Light gray background on hover */
+    transform: scale(1.05);      /* Slightly enlarge the button on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow effect on hover */
+}
+
+button img {
+    transition: transform 0.3s ease;  /* Smooth transition for the icon */
+}
+
+button:hover img {
+    transform: scale(1.1);   /* Enlarge the icon slightly on hover */
+}
 
 .progress-container {
     width: 20%;
@@ -91,4 +133,52 @@ progress {
     width: 80%;
     height: 20px;
     margin-top: 20px;
+}
+
+
+//
+
+button img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+button:hover img.start-icon {
+    content: url("https://img.icons8.com/?size=100&id=398&format=png&color=1890FF");
+}
+
+button:hover img.stop-icon {
+    content: url("https://img.icons8.com/?size=100&id=400&format=png&color=1890FF");
+}
+
+button:hover img.save-icon {
+    content: url("https://img.icons8.com/?size=100&id=18765&format=png&color=1890FF");
+}
+
+button:hover img.load-icon {
+    content: url("https://img.icons8.com/?size=100&id=DFXf9CtoAX6w&format=png&color=1890FF");
+}
+
+button:hover img.clear-icon {
+    content: url("https://img.icons8.com/?size=100&id=37422&format=png&color=1890FF");
+}
+
+button:hover img.scroll-icon {
+    content: url("https://img.icons8.com/?size=100&id=26193&format=png&color=1890FF");
+}
+
+button:hover {
+    background-color: #666363;  /* Light gray background on hover */
+    transform: scale(1.05);      /* Slightly enlarge the button on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow effect on hover */
+}
+
+button img {
+    transition: transform 0.3s ease;  /* Smooth transition for the icon */
+}
+
+button:hover img {
+    transform: scale(1.1);   /* Enlarge the icon slightly on hover */
 }
