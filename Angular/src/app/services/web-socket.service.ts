@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,8 +8,8 @@ export class WebSocketService {
   private webSocket: WebSocket | null = null;   // Keep track of WebSocket instance
   private messageSubject: Subject<any> = new Subject<any>();   // Observable for messages
 
-  // Connect to WebSocket server
-  connect(url: string): void {
+  // Connect to WebSocket server and return observable
+  connect(url: string): Observable<any> {
     // If a WebSocket connection already exists, close it before creating a new one
     if (this.webSocket) {
       this.webSocket.close();
@@ -38,10 +38,8 @@ export class WebSocketService {
     this.webSocket.onclose = () => {
       console.log('WebSocket connection closed');
     };
-  }
 
-  // Get observable for WebSocket messages
-  getMessages() {
+    // Return observable for subscribers to listen to
     return this.messageSubject.asObservable();
   }
 
@@ -50,6 +48,14 @@ export class WebSocketService {
     if (this.webSocket) {
       this.webSocket.close();
       this.webSocket = null;
+    }
+  }
+
+  send(url: string, message: any): void {
+    if (this.webSocket) {
+      this.webSocket.send(JSON.stringify({ url, message })); // Send message with the URL as part of the payload
+    } else {
+      console.error('WebSocket is not connected');
     }
   }
 }

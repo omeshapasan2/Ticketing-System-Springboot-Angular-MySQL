@@ -21,9 +21,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
   logs: string[] = [];
   private logSubscription!: Subscription;
   private wsSubscription!: Subscription; // WebSocket subscription
+  private wsTicketProgressSubscription!: Subscription; // wsTicketProgressSubscription
+
 
   @ViewChild('logsContainer') private logsContainer!: ElementRef; // for scrolling
   @ViewChildren('logItem') private logItems!: QueryList<ElementRef>; // For observing changes to logs
+
+  websocketData: any[] = []; // Store WebSocket data
 
   constructor(
     private http: HttpClient,
@@ -45,35 +49,94 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
         console.error(error);
       }
     );
-
+  
     // Subscribe to real-time logs from LogService
     this.logSubscription = this.logService.getLogs().subscribe(
       (logs: string[]) => {
-        this.logs = logs; // Set the logs
-        this.cdRef.detectChanges(); // Trigger change detection to update the view
-        this.scrollToBottom(); // Ensure it scrolls after new logs
+        this.logs = logs;
+        this.cdRef.detectChanges(); 
+        this.scrollToBottom(); 
       },
       (error) => {
         console.error(error);
       }
     );
-
-    // Connect to WebSocket service and subscribe for ticket count updates
-    this.webSocketService.connect('ws://localhost:8080/ticket-progress');
-    this.wsSubscription = this.webSocketService.getMessages().subscribe(
+  
+    //==================================================
+    // Subscribe to WebSocket for logs (first connection)
+    this.wsSubscription = this.webSocketService.connect('ws://localhost:8080/logs').subscribe(
       (message: any) => {
+        console.log('Received message:', message); 
+  
+        const log = message.log || message;
+        this.logs.push(log); 
+  
+        const match = /Current ticket count:\s*(\d+)/.exec(log);
+        if (match) {
+          this.currentTicketCount = parseInt(match[1], 10); 
+        }
+  
+        this.cdRef.detectChanges();
+        this.scrollToBottom(); 
+      },
+      (error) => {
+        console.error('WebSocket error:', error);
+      }
+    );
+    //==================================================
+
+    // Subscribe to logs WebSocket (from /logs)
+    this.wsSubscription = this.webSocketService.connect('ws://localhost:8080/logs').subscribe(
+      (message: any) => {
+        console.log('Received message from /logs:', message);
+
+        // Forward the message to /ticket-progress WebSocket
+        this.forwardToTicketProgress(message);
+
+        // Process the message for display
+        const log = message.log || message; // Use message.log if it's structured this way
+        this.logs.push(log);
+
+        // Extract ticket count from the log message (if needed)
+        const match = /Current ticket count:\s*(\d+)/.exec(log);
+        if (match) {
+          this.currentTicketCount = parseInt(match[1], 10);
+        }
+
+        // Update view
+        this.cdRef.detectChanges();
+      },
+      (error) => {
+        console.error('Error listening to /logs WebSocket:', error);
+      }
+    );
+
+    //==================================================
+  
+    // Subscribe to WebSocket for ticket progress (second connection)
+    const ticketProgressSubscription = this.webSocketService.connect('ws://localhost:8080/ticket-progress');
+    ticketProgressSubscription.subscribe(
+      (message: any) => {
+        if (message) {
+          this.websocketData.push(message); 
+        }
         if (message && message.currentSize) {
           this.currentTicketCount = message.currentSize;
         }
         if (message && message.maxCapacity) {
           this.maxTicketCapacity = message.maxCapacity;
         }
+        this.cdRef.detectChanges(); 
+        this.scrollToBottom(); 
       },
       (error) => {
         console.error('WebSocket error:', error);
       }
     );
+
+    
   }
+  
 
   ngAfterViewInit(): void {
     if (this.logsContainer) {
@@ -88,7 +151,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.wsSubscription) {
       this.wsSubscription.unsubscribe();
     }
-    this.webSocketService.disconnect(); // close web socket
+    this.webSocketService.disconnect(); // Close WebSocket
+
+    // Unsubscribe from WebSocket connections
+    if (this.wsSubscription) {
+      this.wsSubscription.unsubscribe();
+    }
+    if (this.wsTicketProgressSubscription) {
+      this.wsTicketProgressSubscription.unsubscribe();
+    }
+    this.webSocketService.disconnect(); // Close WebSocket
   }
 
   // progress bar
@@ -195,5 +267,23 @@ export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
       alert('No file selected');
     }
+  }
+
+
+  // Forward received log message to /ticket-progress WebSocket
+  private forwardToTicketProgress(message: any): void {
+    // Connect to /ticket-progress WebSocket
+    this.wsTicketProgressSubscription = this.webSocketService.connect('ws://localhost:8080/ticket-progress').subscribe(
+      (response) => {
+        console.log('Forwarding message to /ticket-progress:', message);
+        
+        // Forward the message, assume it's of the form { log: "..." }
+        const logMessage = { log: message.log || message };
+        this.webSocketService.send('ws://localhost:8080/ticket-progress', logMessage);
+      },
+      (error) => {
+        console.error('Error forwarding message to /ticket-progress:', error);
+      }
+    );
   }
 }

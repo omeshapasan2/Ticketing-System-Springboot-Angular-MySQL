@@ -117,4 +117,19 @@
     <h3>Current Ticket Count: {{ currentTicketCount }}</h3>
     <progress [value]="progress" max="100"></progress>
   </div> -->
+
+  <div>
+    <h4>Ticket Count</h4>
+    <div class="progress-container">
+      <div
+        class="progress-bar"
+        [style.width.%]="progress"
+        [style.background-color]="progress < 50 ? 'lightblue' : 'lightgreen'"
+      >
+        {{ progress | number: '1.0-2' }}%
+      </div>
+    </div>
+    <p>Current Ticket Count: {{ currentTicketCount }} / {{ maxTicketCapacity }}</p>
+  </div>
+  
 </div>
