@@ -72,7 +72,7 @@ button {
     padding: 8px 16px;
     margin-top: 10px;
     cursor: pointer;
-    background-color: #2e2f2f;
+    background-color: #1e1e1e;
     border: none;
     display: inline-flex;
     justify-content: center;
@@ -109,17 +109,17 @@ button span {
 }
 
 button:hover {
-    background-color: #666363;  /* Light gray background on hover */
+    background-color: #ffffff;  /* Light gray background on hover */
     transform: scale(1.05);      /* Slightly enlarge the button on hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow effect on hover */
 }
 
 button img {
-    transition: transform 0.3s ease;  /* Smooth transition for the icon */
+    transition: transform 0.3s ease;  
 }
 
 button:hover img {
-    transform: scale(1.1);   /* Enlarge the icon slightly on hover */
+    transform: scale(1.1);   
 }
 
 .progress-container {
@@ -170,7 +170,7 @@ button:hover img.scroll-icon {
 }
 
 button:hover {
-    background-color: #666363;  /* Light gray background on hover */
+    background-color: #050506;  /* Light gray background on hover */
     transform: scale(1.05);      /* Slightly enlarge the button on hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow effect on hover */
 }
