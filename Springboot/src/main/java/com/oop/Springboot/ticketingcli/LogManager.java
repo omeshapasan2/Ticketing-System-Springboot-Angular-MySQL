@@ -11,15 +11,20 @@ import java.util.List;
 
 public class LogManager {
     private static final List<String> logs = Collections.synchronizedList(new ArrayList<>());
-    private static final String filename = "DataFiles/Logs.txt"; // Path to the log file
+    private static final String filename = "DataFiles/Logs.txt"; // path to the log file
     private static final List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
 
-    // retrieve all logs
+    /**
+     * retrieves all logs stored in memory.
+     * @return a list of log messages
+     */
     public static List<String> getLogs() {
         return new ArrayList<>(logs);
     }
 
-    // clear logs in memory and in the log file
+    /**
+     * clears all logs in memory and in the log file.
+     */
     public static void clearLogs() {
         synchronized (logs) {
             logs.clear();
@@ -27,13 +32,17 @@ public class LogManager {
         clearLogFile();
     }
 
-    // Add a log message > broadcast it to WebSocket clients > save it to the file
+    /**
+     * adds a log message, broadcasts it to all WebSocket clients,
+     * and writes it to the log file.
+     * @param logMessage the log message to be added
+     */
     public static void addLog(String logMessage) {
         synchronized (logs) {
             logs.add(logMessage);
         }
 
-        // Broadcast to all WebSocket clients as JSON
+        // broadcast log message to all open WebSocket clients
         synchronized (sessions) {
             List<WebSocketSession> sessionCopy = new ArrayList<>(sessions);
             for (WebSocketSession session : sessionCopy) {
@@ -51,12 +60,14 @@ public class LogManager {
             }
         }
 
-        // Write to the log file
+        // write log to the log file
         writeLogToFile(logMessage);
     }
 
-
-    // Write a log message to the log file
+    /**
+     * writes a log message to the log file.
+     * @param logMessage the log message to be written
+     */
     private static void writeLogToFile(String logMessage) {
         synchronized (filename) {
             try (FileWriter writer = new FileWriter(filename, true)) {
@@ -68,11 +79,13 @@ public class LogManager {
         }
     }
 
-    // Clear the log file
+    /**
+     * clears the log file by overwriting it with an empty content.
+     */
     private static void clearLogFile() {
         synchronized (filename) {
             try (FileWriter writer = new FileWriter(filename)) {
-                // empty line to clear the file
+                // clear the file by writing nothing
             } catch (IOException e) {
                 System.err.println("Error clearing log file: " + filename);
                 e.printStackTrace();
@@ -80,14 +93,20 @@ public class LogManager {
         }
     }
 
-    // Add a WebSocket session to the list
+    /**
+     * adds a WebSocket session to the list of sessions.
+     * @param session the WebSocket session to be added
+     */
     public static void addSession(WebSocketSession session) {
         synchronized (sessions) {
             sessions.add(session);
         }
     }
 
-    // Remove a WebSocket session from the list
+    /**
+     * removes a WebSocket session from the list of sessions.
+     * @param session the WebSocket session to be removed
+     */
     public static void removeSession(WebSocketSession session) {
         synchronized (sessions) {
             sessions.remove(session);

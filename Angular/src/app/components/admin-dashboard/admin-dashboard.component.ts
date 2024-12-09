@@ -13,10 +13,10 @@ import { ViewChild, ViewChildren, ElementRef } from '@angular/core';
 export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   // Ticket-related properties
   currentTicketCount: number = 0;
-  maxTicketCapacity: number = 1000;
-  totalTickets: number = 500;
-  ticketReleaseRate: number = 123;
-  customerRetrievalRate: number = 43;
+  maxTicketCapacity: number = 0;
+  totalTickets: number = 0;
+  ticketReleaseRate: number = 0;
+  customerRetrievalRate: number = 0;
 
   logs: string[] = [];
   private logSubscription!: Subscription;

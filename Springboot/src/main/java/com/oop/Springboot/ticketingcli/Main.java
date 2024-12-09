@@ -15,7 +15,10 @@ public class Main {
     private static List<Thread> vendorThreads = new ArrayList<>();
     private static List<Thread> customerThreads = new ArrayList<>();
 
-    // start the ticketing process
+    /**
+     * starts the ticketing process by initializing vendors and customers.
+     * @param config configuration object with ticketing details
+     */
     public static void runTicketingProcess(Configuration config) {
         LogManager.clearLogs();  // clear logs before starting
 
@@ -57,7 +60,9 @@ public class Main {
         System.out.println("Ticketing process initialized with " + ticketReleaseRate + " vendors and " + customerRetrievalRate + " customers.");
     }
 
-    // stop the ticketing process
+    /**
+     * stops the ticketing process by interrupting all vendor and customer threads.
+     */
     public static void stopTicketingProcess() {
         isRunning = false;
 
@@ -74,16 +79,19 @@ public class Main {
         System.out.println("Ticketing process stopped.");
     }
 
-    // main method to run the app
+    /**
+     * main method to run the ticketing app, either using previous config or new values.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         Configuration config = null;
         File configFile = new File("config.json");
 
-        // Check if config.json exists
+        // check if config.json exists
         if (configFile.exists()) {
-            // Ask user if they want to use the previous configuration or input new values
+            // ask user if they want to use the previous configuration or input new values
             System.out.print("Would you like to use the previous configuration (config.json)? (y/n): ");
             String userChoice = scanner.nextLine().trim().toLowerCase();
 
@@ -92,7 +100,7 @@ public class Main {
             }
         }
 
-        // If config is still null, prompt the user for new input
+        // if config is still null, prompt the user for new input
         if (config == null) {
             System.out.println("No valid configuration found or user chose to input new values.");
 
@@ -104,7 +112,7 @@ public class Main {
             // get user input for configuration
             //----------------------------------
 
-            // Validate total number of tickets input
+            // validate total number of tickets input
             while (totalTickets <= 0) {
                 System.out.print("Enter total number of tickets: ");
                 if (scanner.hasNextInt()) {
@@ -118,7 +126,7 @@ public class Main {
                 }
             }
 
-            // Validate ticket release rate input
+            // validate ticket release rate input
             while (ticketReleaseRate <= 0) {
                 System.out.print("Enter ticket release rate (vendors): ");
                 if (scanner.hasNextInt()) {
@@ -132,7 +140,7 @@ public class Main {
                 }
             }
 
-            // Validate customer retrieval rate input
+            // validate customer retrieval rate input
             while (customerRetrievalRate <= 0) {
                 System.out.print("Enter customer retrieval rate (customers): ");
                 if (scanner.hasNextInt()) {
@@ -146,7 +154,7 @@ public class Main {
                 }
             }
 
-            // Validate maximum ticket capacity input
+            // validate maximum ticket capacity input
             while (maxTicketCapacity <= 0) {
                 System.out.print("Enter maximum ticket capacity: ");
                 if (scanner.hasNextInt()) {
@@ -180,7 +188,10 @@ public class Main {
         scanner.close();
     }
 
-    // getter for isRunning
+    /**
+     * getter for isRunning flag.
+     * @return the current state of ticketing process (running or not)
+     */
     public static boolean isRunning() {
         return isRunning;
     }

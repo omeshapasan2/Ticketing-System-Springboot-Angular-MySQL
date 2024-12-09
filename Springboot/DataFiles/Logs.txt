@@ -1,55 +1,201 @@
-Configuration updated successfully!
 Starting ticketing process with 100 tickets.
 Vendor 1 started.
+Vendor 2 started.
 Vendor added ticket no: 1
-Customer 1 started.
+Vendor 3 started.
 Current ticket count: 1
-Ticketing process initialized with 1 vendors and 1 customers.
-Customer booked ticket no: 1
+Vendor added ticket no: 1
 Vendor 1 added ticket no: 1
-Current ticket count: 0
+Vendor 4 started.
+Current ticket count: 2
+Vendor 5 started.
+Vendor added ticket no: 1
+Vendor 3 added ticket no: 1
+Current ticket count: 3
+Vendor 2 added ticket no: 1
+Customer 1 started.
+Vendor added ticket no: 1
+Customer 2 started.
+Current ticket count: 4
+Customer 3 started.
+Vendor added ticket no: 1
+Vendor 5 added ticket no: 1
+Current ticket count: 5
+Customer 4 started.
+Vendor 4 added ticket no: 1
+Customer booked ticket no: 1
+Customer 5 started.
+Current ticket count: 4
+Ticketing process initialized with 5 vendors and 5 customers.
+Customer 4 booked ticket no: 1
+Customer booked ticket no: 1
+Current ticket count: 3
+Customer 3 booked ticket no: 1
+Customer booked ticket no: 1
+Current ticket count: 2
+Customer 2 booked ticket no: 1
+Customer booked ticket no: 1
+Current ticket count: 1
 Customer 1 booked ticket no: 1
+Customer booked ticket no: 1
+Current ticket count: 0
+Customer 5 booked ticket no: 1
 Vendor added ticket no: 2
 Current ticket count: 1
-Customer booked ticket no: 2
+Vendor added ticket no: 2
 Vendor 1 added ticket no: 2
-Current ticket count: 0
-Customer 1 booked ticket no: 2
-Vendor added ticket no: 3
-Current ticket count: 1
+Current ticket count: 2
+Vendor 2 added ticket no: 2
+Vendor added ticket no: 2
+Current ticket count: 3
+Vendor 3 added ticket no: 2
+Vendor added ticket no: 2
+Current ticket count: 4
+Vendor 4 added ticket no: 2
+Vendor added ticket no: 2
+Current ticket count: 5
+Vendor 5 added ticket no: 2
+Ticket Pool is full. Vendor couldn't add ticket no: 3
 Vendor 1 added ticket no: 3
-Customer booked ticket no: 3
-Current ticket count: 0
-Customer 1 booked ticket no: 3
-Vendor added ticket no: 4
-Current ticket count: 1
+Ticket Pool is full. Vendor couldn't add ticket no: 3
+Vendor 2 added ticket no: 3
+Ticket Pool is full. Vendor couldn't add ticket no: 3
+Vendor 3 added ticket no: 3
+Ticket Pool is full. Vendor couldn't add ticket no: 3
+Vendor 4 added ticket no: 3
+Ticket Pool is full. Vendor couldn't add ticket no: 3
+Vendor 5 added ticket no: 3
+Ticket Pool is full. Vendor couldn't add ticket no: 4
 Vendor 1 added ticket no: 4
-Customer booked ticket no: 4
-Current ticket count: 0
-Customer 1 booked ticket no: 4
-Vendor added ticket no: 5
-Current ticket count: 1
+Ticket Pool is full. Vendor couldn't add ticket no: 4
+Vendor 2 added ticket no: 4
+Ticket Pool is full. Vendor couldn't add ticket no: 4
+Vendor 3 added ticket no: 4
+Ticket Pool is full. Vendor couldn't add ticket no: 4
+Vendor 4 added ticket no: 4
+Ticket Pool is full. Vendor couldn't add ticket no: 4
+Vendor 5 added ticket no: 4
+Ticket Pool is full. Vendor couldn't add ticket no: 5
 Vendor 1 added ticket no: 5
-Customer booked ticket no: 5
-Current ticket count: 0
-Customer 1 booked ticket no: 5
-Vendor added ticket no: 6
+Ticket Pool is full. Vendor couldn't add ticket no: 5
+Vendor 2 added ticket no: 5
+Ticket Pool is full. Vendor couldn't add ticket no: 5
+Ticket Pool is full. Vendor couldn't add ticket no: 5
+Vendor 3 added ticket no: 5
+Vendor 4 added ticket no: 5
+Ticket Pool is full. Vendor couldn't add ticket no: 5
+Vendor 5 added ticket no: 5
+Customer booked ticket no: 2
+Current ticket count: 4
+Customer 4 booked ticket no: 2
+Customer booked ticket no: 2
+Current ticket count: 3
+Customer 3 booked ticket no: 2
+Customer booked ticket no: 2
+Current ticket count: 2
+Customer 5 booked ticket no: 2
+Customer booked ticket no: 2
 Current ticket count: 1
+Customer 2 booked ticket no: 2
+Vendor added ticket no: 6
+Current ticket count: 2
+Vendor 2 added ticket no: 6
+Vendor added ticket no: 6
+Current ticket count: 3
 Vendor 1 added ticket no: 6
+Customer booked ticket no: 2
+Current ticket count: 2
+Customer 1 booked ticket no: 2
+Vendor added ticket no: 6
+Current ticket count: 3
+Vendor 3 added ticket no: 6
+Vendor added ticket no: 6
+Current ticket count: 4
+Vendor 4 added ticket no: 6
+Vendor added ticket no: 6
+Current ticket count: 5
+Vendor 5 added ticket no: 6
+Ticket Pool is full. Vendor couldn't add ticket no: 7
+Vendor 2 added ticket no: 7
+Ticket Pool is full. Vendor couldn't add ticket no: 7
+Vendor 1 added ticket no: 7
+Ticket Pool is full. Vendor couldn't add ticket no: 7
+Vendor 3 added ticket no: 7
+Ticket Pool is full. Vendor couldn't add ticket no: 7
+Vendor 4 added ticket no: 7
+Ticket Pool is full. Vendor couldn't add ticket no: 7
+Vendor 5 added ticket no: 7
+Ticket Pool is full. Vendor couldn't add ticket no: 8
+Vendor 2 added ticket no: 8
+Ticket Pool is full. Vendor couldn't add ticket no: 8
+Vendor 1 added ticket no: 8
+Ticket Pool is full. Vendor couldn't add ticket no: 8
+Vendor 3 added ticket no: 8
+Ticket Pool is full. Vendor couldn't add ticket no: 8
+Vendor 4 added ticket no: 8
+Ticket Pool is full. Vendor couldn't add ticket no: 8
+Vendor 5 added ticket no: 8
+Ticket Pool is full. Vendor couldn't add ticket no: 9
+Vendor 2 added ticket no: 9
+Ticket Pool is full. Vendor couldn't add ticket no: 9
+Vendor 1 added ticket no: 9
+Ticket Pool is full. Vendor couldn't add ticket no: 9
+Vendor 3 added ticket no: 9
+Ticket Pool is full. Vendor couldn't add ticket no: 9
+Vendor 4 added ticket no: 9
+Ticket Pool is full. Vendor couldn't add ticket no: 9
+Vendor 5 added ticket no: 9
+Ticket Pool is full. Vendor couldn't add ticket no: 10
+Vendor 2 added ticket no: 10
+Ticket Pool is full. Vendor couldn't add ticket no: 10
+Vendor 1 added ticket no: 10
+Ticket Pool is full. Vendor couldn't add ticket no: 10
+Vendor 3 added ticket no: 10
+Ticket Pool is full. Vendor couldn't add ticket no: 10
+Vendor 4 added ticket no: 10
+Ticket Pool is full. Vendor couldn't add ticket no: 10
+Vendor 5 added ticket no: 10
+Customer booked ticket no: 6
+Current ticket count: 4
+Customer 4 booked ticket no: 6
+Customer booked ticket no: 6
+Current ticket count: 3
+Customer 3 booked ticket no: 6
+Customer booked ticket no: 6
+Current ticket count: 2
+Customer 5 booked ticket no: 6
+Customer booked ticket no: 6
+Current ticket count: 1
+Customer 2 booked ticket no: 6
 Customer booked ticket no: 6
 Current ticket count: 0
 Customer 1 booked ticket no: 6
-Vendor added ticket no: 7
+Vendor added ticket no: 11
 Current ticket count: 1
-Vendor 1 added ticket no: 7
-Customer booked ticket no: 7
-Current ticket count: 0
-Customer 1 booked ticket no: 7
-Vendor added ticket no: 8
-Current ticket count: 1
-Vendor 1 added ticket no: 8
-Customer booked ticket no: 8
-Current ticket count: 0
-Customer 1 booked ticket no: 8
+Vendor 2 added ticket no: 11
+Vendor added ticket no: 11
+Current ticket count: 2
+Vendor 1 added ticket no: 11
+Vendor added ticket no: 11
+Current ticket count: 3
+Vendor 3 added ticket no: 11
+Vendor added ticket no: 11
+Current ticket count: 4
+Vendor 4 added ticket no: 11
+Vendor added ticket no: 11
+Current ticket count: 5
+Vendor 5 added ticket no: 11
+Ticket Pool is full. Vendor couldn't add ticket no: 12
+Vendor 2 added ticket no: 12
+Ticket Pool is full. Vendor couldn't add ticket no: 12
+Vendor 1 added ticket no: 12
+Ticket Pool is full. Vendor couldn't add ticket no: 12
+Vendor 3 added ticket no: 12
+Ticket Pool is full. Vendor couldn't add ticket no: 12
+Vendor 4 added ticket no: 12
 Ticketing process stopped.
+Vendor 5 finished generating all tickets.
 Vendor 1 finished generating all tickets.
+Vendor 2 finished generating all tickets.
+Vendor 3 finished generating all tickets.
+Vendor 4 finished generating all tickets.

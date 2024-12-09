@@ -6,6 +6,13 @@ public class Vendor implements Runnable {
     private final int totalTicketsToGenerate;
     private final int ticketReleaseRate;
 
+    /**
+     * constructor to initialize the vendor with necessary details.
+     * @param vendorId the unique id for the vendor
+     * @param ticketPool the pool where tickets will be added
+     * @param totalTicketsToGenerate the total number of tickets the vendor will generate
+     * @param ticketReleaseRate the rate at which tickets are released (added to the pool)
+     */
     public Vendor(int vendorId, TicketPool ticketPool, int totalTicketsToGenerate, int ticketReleaseRate) {
         this.vendorId = vendorId;
         this.ticketPool = ticketPool;
@@ -13,13 +20,17 @@ public class Vendor implements Runnable {
         this.ticketReleaseRate = ticketReleaseRate;
     }
 
+    /**
+     * generates tickets and adds them to the ticket pool at a set release rate.
+     * logs and prints details of each ticket added.
+     */
     @Override
     public void run() {
         for (int i = 1; i <= totalTicketsToGenerate; i++) {
-            Ticket ticket = new Ticket(i); // create a new Ticket object
+            Ticket ticket = new Ticket(i); // create a new ticket object
             ticketPool.addTicket(ticket);  // add the ticket to the pool
 
-            // log the ticket addition
+            // log ticket addition
             LogManager.addLog("Vendor " + vendorId + " added ticket no: " + ticket.getTicketNumber());
             System.out.println("Vendor " + vendorId + " added ticket no: " + ticket.getTicketNumber());
 
