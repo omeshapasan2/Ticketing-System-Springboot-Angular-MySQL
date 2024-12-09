@@ -1,15 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, QueryList } from '@angular/core';
 import { LogService } from '../../services/log.service';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from '../../services/web-socket.service';
+import { ViewChild, ViewChildren, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss'],
 })
-export class AdminDashboardComponent implements OnInit, OnDestroy {
+export class AdminDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   // Ticket-related properties
   currentTicketCount: number = 0;
   maxTicketCapacity: number = 1000;
@@ -21,10 +22,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   private logSubscription!: Subscription;
   private wsSubscription!: Subscription; // WebSocket subscription
 
+  @ViewChild('logsContainer') private logsContainer!: ElementRef; // for scrolling
+  @ViewChildren('logItem') private logItems!: QueryList<ElementRef>; // For observing changes to logs
+
   constructor(
     private http: HttpClient,
     private logService: LogService,
-    private webSocketService: WebSocketService // Inject WebSocketService
+    private webSocketService: WebSocketService, // Inject WebSocketService
+    private cdRef: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +50,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.logSubscription = this.logService.getLogs().subscribe(
       (logs: string[]) => {
         this.logs = logs; // Set the logs
+        this.cdRef.detectChanges(); // Trigger change detection to update the view
+        this.scrollToBottom(); // Ensure it scrolls after new logs
       },
       (error) => {
         console.error(error);
@@ -66,6 +73,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         console.error('WebSocket error:', error);
       }
     );
+  }
+
+  ngAfterViewInit(): void {
+    // Ensure the ViewChild is initialized before calling scrollToBottom
+    if (this.logsContainer) {
+      this.scrollToBottom();
+    }
   }
 
   ngOnDestroy(): void {
@@ -95,6 +109,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.http.post('http://localhost:8080/api/ticketing/config', formData).subscribe(
       (response) => {
         console.log('Form Submitted:', response);
+        this.scrollToBottom(); // Scroll to bottom after form submission
       },
       (error) => {
         console.error('Error updating config:', error);
@@ -117,5 +132,20 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   // Clear logs
   clearLogs(): void {
     this.logs = []; // Clear the logs array
+  }
+
+  // Scroll the logs container to the bottom
+  scrollToBottom(): void {
+    if (this.logsContainer) {
+      const container = this.logsContainer.nativeElement;
+      setTimeout(() => {
+        container.scrollTop = container.scrollHeight;
+      }, 100); // Delay to ensure the DOM is updated
+    }
+  }
+
+  // Detect when logs change and scroll to the bottom
+  private onLogsChanged(): void {
+    this.scrollToBottom();
   }
 }

@@ -65,27 +65,18 @@
     </form>
   </div>
 
-  <div class="logs-container">
+  <div class="logs-container" #logsContainer>
     <h2>Real-Time Logs</h2>
     <div class="logs">
-      <div *ngFor="let log of logs">{{ log }}</div>
+      <div *ngFor="let log of logs" #logItem>{{ log }}</div>
     </div>
-    <button type="button" (click)="clearLogs()">Clear Logs (Frontend)</button>
-  </div>
+    <button type="button" (click)="clearLogs()">Clear Logs</button>
+    <button type="button" (click)="scrollToBottom()">Scroll to Bottom</button>
+  </div>  
+  
 
-  <!-- Vertical Progress Bars
-  <div>
-    <p>Total Tickets: {{ totalTickets }}</p>
-    <p>Maximum Ticket Capacity: {{ maxTicketCapacity }}</p>
-  </div>
-  <div>
-    <h3>Current Ticket Count: {{ totalTickets }}</h3>
-  </div> -->
-
-  <div>
+  <div class="progress-container">
     <h3>Current Ticket Count: {{ currentTicketCount }}</h3>
     <progress [value]="progress" max="100"></progress>
   </div>
-  
-  
 </div>
