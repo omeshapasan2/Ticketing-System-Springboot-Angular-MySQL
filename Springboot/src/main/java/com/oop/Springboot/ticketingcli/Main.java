@@ -115,58 +115,75 @@ public class Main {
             // validate total number of tickets input
             while (totalTickets <= 0) {
                 System.out.print("Enter total number of tickets: ");
-                if (scanner.hasNextInt()) {
-                    totalTickets = scanner.nextInt();
-                    if (totalTickets <= 0) {
-                        System.out.println("Please enter a positive integer for total tickets.");
-                    }
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty()) {
+                    System.out.println("Input an integer.");
                 } else {
-                    System.out.println("Invalid input. Please enter an integer.");
-                    scanner.next(); // clear invalid input
+                    try {
+                        totalTickets = Integer.parseInt(input);
+                        if (totalTickets <= 0) {
+                            System.out.println("Please enter a positive integer for total tickets.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter an integer.");
+                    }
                 }
             }
 
             // validate ticket release rate input
             while (ticketReleaseRate <= 0) {
                 System.out.print("Enter ticket release rate (vendors): ");
-                if (scanner.hasNextInt()) {
-                    ticketReleaseRate = scanner.nextInt();
-                    if (ticketReleaseRate <= 0) {
-                        System.out.println("Please enter a positive integer for ticket release rate.");
-                    }
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty()) {
+                    System.out.println("Input an integer.");
                 } else {
-                    System.out.println("Invalid input. Please enter an integer.");
-                    scanner.next(); // clear invalid input
+                    try {
+                        ticketReleaseRate = Integer.parseInt(input);
+                        if (ticketReleaseRate <= 0) {
+                            System.out.println("Please enter a positive integer for ticket release rate.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter an integer.");
+                    }
                 }
             }
 
             // validate customer retrieval rate input
             while (customerRetrievalRate <= 0) {
                 System.out.print("Enter customer retrieval rate (customers): ");
-                if (scanner.hasNextInt()) {
-                    customerRetrievalRate = scanner.nextInt();
-                    if (customerRetrievalRate <= 0) {
-                        System.out.println("Please enter a positive integer for customer retrieval rate.");
-                    }
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty()) {
+                    System.out.println("Input an integer.");
                 } else {
-                    System.out.println("Invalid input. Please enter an integer.");
-                    scanner.next(); // clear invalid input
+                    try {
+                        customerRetrievalRate = Integer.parseInt(input);
+                        if (customerRetrievalRate <= 0) {
+                            System.out.println("Please enter a positive integer for customer retrieval rate.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter an integer.");
+                    }
                 }
             }
 
             // validate maximum ticket capacity input
             while (maxTicketCapacity <= 0) {
                 System.out.print("Enter maximum ticket capacity: ");
-                if (scanner.hasNextInt()) {
-                    maxTicketCapacity = scanner.nextInt();
-                    if (maxTicketCapacity <= 0) {
-                        System.out.println("Please enter a positive integer for maximum ticket capacity.");
-                    }
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty()) {
+                    System.out.println("Input an integer.");
                 } else {
-                    System.out.println("Invalid input. Please enter an integer.");
-                    scanner.next(); // clear invalid input
+                    try {
+                        maxTicketCapacity = Integer.parseInt(input);
+                        if (maxTicketCapacity <= 0) {
+                            System.out.println("Please enter a positive integer for maximum ticket capacity.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter an integer.");
+                    }
                 }
             }
+
 
             // create configuration object and set values
             config = new Configuration();
