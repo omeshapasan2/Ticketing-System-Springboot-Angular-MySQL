@@ -1,5 +1,7 @@
 # Ticketing System
 
+![Logo](images/logo.png)
+
 A Ticketing System designed to simulate a real-time ticket booking process. The system includes:
 
 - **Vendor Threads**: Add tickets to the pool.
