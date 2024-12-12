@@ -1,37 +1,12 @@
-Starting ticketing process with 5 tickets.
+Starting ticketing process with 1 tickets.
 Vendor 1 started.
-Customer 1 started.
 Vendor added ticket no: 1
+Customer 1 started.
 Current ticket count: 1
-Customer booked ticket no: 1
-Current ticket count: 0
 Ticketing process initialized with 1 vendors and 1 customers.
-Customer 1 booked ticket no: 1
-Ticketing process complete.
+Customer booked ticket no: 1
 Vendor 1 added ticket no: 1
-Vendor added ticket no: 2
-Current ticket count: 1
-Vendor 1 added ticket no: 2
-Customer booked ticket no: 2
 Current ticket count: 0
-Customer 1 booked ticket no: 2
-Vendor added ticket no: 3
-Current ticket count: 1
-Vendor 1 added ticket no: 3
-Customer booked ticket no: 3
-Current ticket count: 0
-Customer 1 booked ticket no: 3
-Vendor added ticket no: 4
-Current ticket count: 1
-Vendor 1 added ticket no: 4
-Customer booked ticket no: 4
-Current ticket count: 0
-Customer 1 booked ticket no: 4
-Vendor added ticket no: 5
-Current ticket count: 1
-Vendor 1 added ticket no: 5
-Customer booked ticket no: 5
-Current ticket count: 0
-Customer 1 booked ticket no: 5
+Customer 1 booked ticket no: 1
 Vendor 1 finished generating all tickets.
 Ticketing process stopped.
